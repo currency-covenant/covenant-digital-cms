@@ -56,6 +56,10 @@ const Users: CollectionConfig = {
   endpoints: [externalUsersLogin],
   fields: [
     {
+      name: 'name',
+      type: 'text',
+    },
+    {
       type: 'text',
       name: 'password',
       hidden: true,

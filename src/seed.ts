@@ -107,6 +107,7 @@ export const seed: NonNullable<Config['onInit']> = async (payload): Promise<void
 
   await payload.create({
     collection: 'pages',
+    draft: true,
     data: {
       slug: 'home',
       tenant: tenant1.id,
@@ -116,6 +117,7 @@ export const seed: NonNullable<Config['onInit']> = async (payload): Promise<void
 
   await payload.create({
     collection: 'pages',
+    draft: true,
     data: {
       slug: 'home',
       tenant: tenant2.id,
@@ -125,6 +127,7 @@ export const seed: NonNullable<Config['onInit']> = async (payload): Promise<void
 
   await payload.create({
     collection: 'pages',
+    draft: true,
     data: {
       slug: 'home',
       tenant: tenant3.id,

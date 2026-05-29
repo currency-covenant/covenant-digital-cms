@@ -6,12 +6,17 @@ import { buildConfig } from "payload";
 import { fileURLToPath } from "url";
 
 import { Pages } from "./collections/Pages";
+import { Posts } from "./collections/Posts";
+import { Media } from "./collections/Media";
+import { Categories } from "./collections/Categories";
 import { Tenants } from "./collections/Tenants";
 import Users from "./collections/Users";
 import { multiTenantPlugin } from "@payloadcms/plugin-multi-tenant";
+import { s3Storage } from "@payloadcms/storage-s3";
 import { isSuperAdmin } from "./access/isSuperAdmin";
 import type { Config } from "./payload-types";
 import { getUserTenantIDs } from "./utilities/getUserTenantIDs";
+import { plugins } from "./plugins";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -20,8 +25,11 @@ const dirname = path.dirname(filename);
 export default buildConfig({
   admin: {
     user: "users",
+    importMap: {
+      baseDir: path.resolve(dirname),
+    },
   },
-  collections: [Pages, Users, Tenants],
+  collections: [Pages, Posts, Media, Categories, Users, Tenants],
   // db: mongooseAdapter({
   //   url: process.env.DATABASE_URL as string,
   // }),
@@ -39,9 +47,28 @@ export default buildConfig({
     outputFile: path.resolve(dirname, "payload-types.ts"),
   },
   plugins: [
+    s3Storage({
+      acl: "public-read",
+      bucket: process.env.S3_BUCKET!,
+      config: {
+        region: process.env.S3_REGION!,
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY_ID!,
+          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY!,
+        },
+      },
+      collections: {
+        media: {
+          prefix: "media",
+        },
+      },
+    }),
     multiTenantPlugin<Config>({
       collections: {
         pages: {},
+        posts: {},
+        media: {},
+        categories: {},
       },
       tenantField: {
         access: {
@@ -59,5 +86,6 @@ export default buildConfig({
       },
       userHasAccessToAllTenants: (user) => isSuperAdmin(user),
     }),
+    ...plugins,
   ],
 });
