@@ -11,6 +11,9 @@ import { Media } from "./collections/Media";
 import { Categories } from "./collections/Categories";
 import { Tenants } from "./collections/Tenants";
 import Users from "./collections/Users";
+import { APIKeys } from "./collections/APIKeys";
+import { Webhooks } from "./collections/Webhooks";
+import { AuditLogs } from "./collections/AuditLogs";
 import { multiTenantPlugin } from "@payloadcms/plugin-multi-tenant";
 import { s3Storage } from "@payloadcms/storage-s3";
 import { isSuperAdmin } from "./access/isSuperAdmin";
@@ -29,7 +32,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Pages, Posts, Media, Categories, Users, Tenants],
+  collections: [Pages, Posts, Media, Categories, Users, Tenants, APIKeys, Webhooks, AuditLogs],
   // db: mongooseAdapter({
   //   url: process.env.DATABASE_URL as string,
   // }),
@@ -46,9 +49,16 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),
   },
+  cors: [
+    process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000',
+    ...(process.env.ALLOWED_ORIGINS?.split(',') || []),
+  ],
+  csrf: [
+    process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000',
+    ...(process.env.ALLOWED_ORIGINS?.split(',') || []),
+  ],
   plugins: [
     s3Storage({
-      acl: "public-read",
       bucket: process.env.S3_BUCKET!,
       config: {
         region: process.env.S3_REGION!,

@@ -1,16 +1,21 @@
 import type { CollectionConfig } from 'payload'
 
 import { ensureUniqueSlug } from './hooks/ensureUniqueSlug'
-import { superAdminOrTenantAdminAccess } from '@/collections/Pages/access/superAdminOrTenantAdmin'
+import { isSuperAdmin } from '@/access/isSuperAdmin'
+import { getUserTenantIDsByRoles } from '@/access/hasRole'
+import { setTenantFromUser } from '@/hooks/setTenantFromUser'
 import { CallToAction } from '../../blocks/CallToAction/config'
 import { Content } from '../../blocks/Content/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { Archive } from '../../blocks/ArchiveBlock/config'
 import { FormBlock } from '../../blocks/Form/config'
+import { Profile } from '../../blocks/Profile/config'
 import { hero } from '../../heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 import { revalidateDelete, revalidatePage } from './hooks/revalidatePage'
+import { triggerWebhookAfterChange, triggerWebhookAfterDelete } from '@/hooks/triggerWebhooks'
+import { logAuditAfterChange, logAuditAfterDelete } from '@/hooks/logAuditEvent'
 
 import {
   MetaDescriptionField,
@@ -23,10 +28,31 @@ import {
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
   access: {
-    create: superAdminOrTenantAdminAccess,
-    delete: superAdminOrTenantAdminAccess,
+    create: ({ req, data }) => {
+      if (!req.user) return false
+      if (isSuperAdmin(req.user)) return true
+      const tenantId = data?.tenant
+      if (tenantId) {
+        const allowed = getUserTenantIDsByRoles(req.user, ['tenant-admin', 'tenant-publisher'])
+        return allowed.includes(tenantId)
+      }
+      return getUserTenantIDsByRoles(req.user, ['tenant-admin', 'tenant-publisher']).length > 0
+    },
     read: () => true,
-    update: superAdminOrTenantAdminAccess,
+    update: ({ req }) => {
+      if (!req.user) return false
+      if (isSuperAdmin(req.user)) return true
+      const tenantIDs = getUserTenantIDsByRoles(req.user, ['tenant-admin', 'tenant-publisher', 'tenant-editor'])
+      if (tenantIDs.length === 0) return false
+      return { tenant: { in: tenantIDs } }
+    },
+    delete: ({ req }) => {
+      if (!req.user) return false
+      if (isSuperAdmin(req.user)) return true
+      const tenantIDs = getUserTenantIDsByRoles(req.user, ['tenant-admin'])
+      if (tenantIDs.length === 0) return false
+      return { tenant: { in: tenantIDs } }
+    },
   },
   defaultPopulate: {
     title: true,
@@ -54,7 +80,7 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock],
+              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, Profile],
               required: true,
               admin: {
                 initCollapsed: true,
@@ -109,16 +135,14 @@ export const Pages: CollectionConfig<'pages'> = {
     },
   ],
   hooks: {
-    afterChange: [revalidatePage],
-    beforeChange: [populatePublishedAt],
-    afterDelete: [revalidateDelete],
+    afterChange: [revalidatePage, triggerWebhookAfterChange, logAuditAfterChange],
+    beforeChange: [populatePublishedAt, setTenantFromUser],
+    afterDelete: [revalidateDelete, triggerWebhookAfterDelete, logAuditAfterDelete],
   },
   versions: {
     drafts: {
-      autosave: {
-        interval: 100,
-      },
       schedulePublish: true,
+      validate: true,
     },
     maxPerDoc: 50,
   },

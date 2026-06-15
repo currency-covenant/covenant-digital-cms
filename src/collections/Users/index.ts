@@ -21,7 +21,7 @@ const defaultTenantArrayField = tenantsArrayField({
       type: 'select',
       defaultValue: ['tenant-viewer'],
       hasMany: true,
-      options: ['tenant-admin', 'tenant-viewer'],
+      options: ['tenant-admin', 'tenant-publisher', 'tenant-editor', 'tenant-viewer'],
       required: true,
       access: {
         update: ({ req }) => {

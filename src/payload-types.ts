@@ -73,6 +73,9 @@ export interface Config {
     categories: Category;
     users: User;
     tenants: Tenant;
+    'api-keys': ApiKey;
+    webhooks: Webhook;
+    'audit-logs': AuditLog;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -96,6 +99,9 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     tenants: TenantsSelect<false> | TenantsSelect<true>;
+    'api-keys': ApiKeysSelect<false> | ApiKeysSelect<true>;
+    webhooks: WebhooksSelect<false> | WebhooksSelect<true>;
+    'audit-logs': AuditLogsSelect<false> | AuditLogsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -198,7 +204,7 @@ export interface Page {
       | null;
     media?: (number | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock | ProfileBlock)[];
   meta?: {
     title?: string | null;
     /**
@@ -445,7 +451,7 @@ export interface User {
   tenants?:
     | {
         tenant: number | Tenant;
-        roles: ('tenant-admin' | 'tenant-viewer')[];
+        roles: ('tenant-admin' | 'tenant-publisher' | 'tenant-editor' | 'tenant-viewer')[];
         id?: string | null;
       }[]
     | null;
@@ -811,6 +817,79 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProfileBlock".
+ */
+export interface ProfileBlock {
+  name: string;
+  words: {
+    word: string;
+    id?: string | null;
+  }[];
+  description?: string | null;
+  profileImage?: (number | null) | Media;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'profile';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "api-keys".
+ */
+export interface ApiKey {
+  id: number;
+  name: string;
+  key: string;
+  tenant: number | Tenant;
+  roles: ('tenant-viewer' | 'tenant-editor' | 'tenant-publisher' | 'tenant-admin')[];
+  expiresAt?: string | null;
+  lastUsedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "webhooks".
+ */
+export interface Webhook {
+  id: number;
+  label: string;
+  url: string;
+  secret: string;
+  events: ('onCreate' | 'onUpdate' | 'onDelete' | 'onPublish')[];
+  collections: ('pages' | 'posts' | 'media' | 'categories')[];
+  tenant: number | Tenant;
+  enabled?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Audit trail of all content changes
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "audit-logs".
+ */
+export interface AuditLog {
+  id: number;
+  action: 'create' | 'update' | 'delete';
+  collection: string;
+  docId: string;
+  diff?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  user?: (number | null) | User;
+  tenant?: (number | null) | Tenant;
+  timestamp: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1024,6 +1103,18 @@ export interface PayloadLockedDocument {
         value: number | Tenant;
       } | null)
     | ({
+        relationTo: 'api-keys';
+        value: number | ApiKey;
+      } | null)
+    | ({
+        relationTo: 'webhooks';
+        value: number | Webhook;
+      } | null)
+    | ({
+        relationTo: 'audit-logs';
+        value: number | AuditLog;
+      } | null)
+    | ({
         relationTo: 'redirects';
         value: number | Redirect;
       } | null)
@@ -1122,6 +1213,7 @@ export interface PagesSelect<T extends boolean = true> {
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
+        profile?: T | ProfileBlockSelect<T>;
       };
   meta?:
     | T
@@ -1217,6 +1309,23 @@ export interface FormBlockSelect<T extends boolean = true> {
   form?: T;
   enableIntro?: T;
   introContent?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProfileBlock_select".
+ */
+export interface ProfileBlockSelect<T extends boolean = true> {
+  name?: T;
+  words?:
+    | T
+    | {
+        word?: T;
+        id?: T;
+      };
+  description?: T;
+  profileImage?: T;
   id?: T;
   blockName?: T;
 }
@@ -1411,6 +1520,50 @@ export interface TenantsSelect<T extends boolean = true> {
   domain?: T;
   slug?: T;
   allowPublicRead?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "api-keys_select".
+ */
+export interface ApiKeysSelect<T extends boolean = true> {
+  name?: T;
+  key?: T;
+  tenant?: T;
+  roles?: T;
+  expiresAt?: T;
+  lastUsedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "webhooks_select".
+ */
+export interface WebhooksSelect<T extends boolean = true> {
+  label?: T;
+  url?: T;
+  secret?: T;
+  events?: T;
+  collections?: T;
+  tenant?: T;
+  enabled?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "audit-logs_select".
+ */
+export interface AuditLogsSelect<T extends boolean = true> {
+  action?: T;
+  collection?: T;
+  docId?: T;
+  diff?: T;
+  user?: T;
+  tenant?: T;
+  timestamp?: T;
   updatedAt?: T;
   createdAt?: T;
 }

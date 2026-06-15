@@ -6,16 +6,40 @@ import {
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
 
-import { superAdminOrTenantAdminAccess } from '@/collections/Pages/access/superAdminOrTenantAdmin'
+import { isSuperAdmin } from '@/access/isSuperAdmin'
+import { getUserTenantIDsByRoles } from '@/access/hasRole'
+import { triggerWebhookAfterChange, triggerWebhookAfterDelete } from '@/hooks/triggerWebhooks'
+import { logAuditAfterChange, logAuditAfterDelete } from '@/hooks/logAuditEvent'
 
 export const Media: CollectionConfig = {
   slug: 'media',
   folders: true,
   access: {
-    create: superAdminOrTenantAdminAccess,
-    delete: superAdminOrTenantAdminAccess,
+    create: ({ req, data }) => {
+      if (!req.user) return false
+      if (isSuperAdmin(req.user)) return true
+      const tenantId = data?.tenant
+      if (tenantId) {
+        const allowed = getUserTenantIDsByRoles(req.user, ['tenant-admin', 'tenant-publisher', 'tenant-editor'])
+        return allowed.includes(tenantId)
+      }
+      return getUserTenantIDsByRoles(req.user, ['tenant-admin', 'tenant-publisher', 'tenant-editor']).length > 0
+    },
     read: () => true,
-    update: superAdminOrTenantAdminAccess,
+    update: ({ req }) => {
+      if (!req.user) return false
+      if (isSuperAdmin(req.user)) return true
+      const tenantIDs = getUserTenantIDsByRoles(req.user, ['tenant-admin', 'tenant-publisher', 'tenant-editor'])
+      if (tenantIDs.length === 0) return false
+      return { tenant: { in: tenantIDs } }
+    },
+    delete: ({ req }) => {
+      if (!req.user) return false
+      if (isSuperAdmin(req.user)) return true
+      const tenantIDs = getUserTenantIDsByRoles(req.user, ['tenant-admin'])
+      if (tenantIDs.length === 0) return false
+      return { tenant: { in: tenantIDs } }
+    },
   },
   fields: [
     {
@@ -32,6 +56,10 @@ export const Media: CollectionConfig = {
       }),
     },
   ],
+  hooks: {
+    afterChange: [triggerWebhookAfterChange, logAuditAfterChange],
+    afterDelete: [triggerWebhookAfterDelete, logAuditAfterDelete],
+  },
   upload: {
     adminThumbnail: 'thumbnail',
     focalPoint: true,
