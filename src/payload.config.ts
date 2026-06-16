@@ -62,6 +62,7 @@ export default buildConfig({
       bucket: process.env.S3_BUCKET!,
       config: {
         region: process.env.S3_REGION!,
+        endpoint: `https://${process.env.S3_BUCKET}.s3.${process.env.S3_REGION}.amazonaws.com`,
         credentials: {
           accessKeyId: process.env.S3_ACCESS_KEY_ID!,
           secretAccessKey: process.env.S3_SECRET_ACCESS_KEY!,
@@ -70,6 +71,7 @@ export default buildConfig({
       collections: {
         media: {
           prefix: "media",
+          disablePayloadAccessControl: true,
         },
       },
     }),
