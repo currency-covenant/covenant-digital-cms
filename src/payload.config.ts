@@ -72,6 +72,8 @@ export default buildConfig({
         media: {
           prefix: "media",
           disablePayloadAccessControl: true,
+          generateFileURL: ({ filename, prefix }) =>
+            `https://${process.env.S3_BUCKET}.s3.${process.env.S3_REGION}.amazonaws.com/${prefix ? prefix + '/' : ''}${filename}`,
         },
       },
     }),
