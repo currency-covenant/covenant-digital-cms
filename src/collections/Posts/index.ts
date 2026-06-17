@@ -212,8 +212,8 @@ export const Posts: CollectionConfig<'posts'> = {
     slugField(),
   ],
   hooks: {
+    beforeValidate: [setTenantFromUser],
     afterChange: [revalidatePost, triggerWebhookAfterChange, logAuditAfterChange],
-    beforeChange: [setTenantFromUser],
     afterRead: [populateAuthors],
     afterDelete: [revalidateDelete, triggerWebhookAfterDelete, logAuditAfterDelete],
   },

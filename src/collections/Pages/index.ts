@@ -135,8 +135,9 @@ export const Pages: CollectionConfig<'pages'> = {
     },
   ],
   hooks: {
+    beforeValidate: [setTenantFromUser],
     afterChange: [revalidatePage, triggerWebhookAfterChange, logAuditAfterChange],
-    beforeChange: [populatePublishedAt, setTenantFromUser],
+    beforeChange: [populatePublishedAt],
     afterDelete: [revalidateDelete, triggerWebhookAfterDelete, logAuditAfterDelete],
   },
   versions: {
