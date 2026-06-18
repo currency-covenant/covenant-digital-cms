@@ -118,6 +118,8 @@ export default buildConfig({
           },
         },
       },
+      useTenantsCollectionAccess: false,
+      useTenantsListFilter: false,
       tenantsArrayField: {
         includeDefaultField: false,
       },

@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
 import { isSuperAdmin, isSuperAdminAccess } from '@/access/isSuperAdmin'
+import { getUserTenantIDs } from '@/utilities/getUserTenantIDs'
 import { updateAndDeleteAccess } from './access/updateAndDelete'
 
 export const Tenants: CollectionConfig = {
@@ -8,7 +9,13 @@ export const Tenants: CollectionConfig = {
   access: {
     create: isSuperAdminAccess,
     delete: updateAndDeleteAccess,
-    read: ({ req }) => Boolean(req.user),
+    read: ({ req }) => {
+      if (!req.user) return false
+      if (isSuperAdmin(req.user)) return true
+      const tenantIDs = getUserTenantIDs(req.user)
+      if (tenantIDs.length === 0) return false
+      return { id: { in: tenantIDs } }
+    },
     update: updateAndDeleteAccess,
   },
   admin: {
