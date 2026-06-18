@@ -106,7 +106,7 @@ export default buildConfig({
           accessResultOverride: ({ accessResult, req }: { accessResult: any; req: any }) =>
             hasTenantPermission({ req, collectionSlug: 'categories', accessResult }),
         },
-      } as any,
+      },
       tenantField: {
         access: {
           read: () => true,
