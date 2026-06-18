@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-import { isSuperAdminAccess } from '@/access/isSuperAdmin'
+import { isSuperAdmin, isSuperAdminAccess } from '@/access/isSuperAdmin'
 import { updateAndDeleteAccess } from './access/updateAndDelete'
 
 export const Tenants: CollectionConfig = {
@@ -46,6 +46,27 @@ export const Tenants: CollectionConfig = {
       },
       defaultValue: false,
       index: true,
+    },
+    {
+      name: 'permissions',
+      type: 'select',
+      hasMany: true,
+      options: [
+        { label: 'Pages', value: 'pages' },
+        { label: 'Posts', value: 'posts' },
+        { label: 'Media', value: 'media' },
+        { label: 'Categories', value: 'categories' },
+      ],
+      defaultValue: ['pages', 'posts', 'media', 'categories'],
+      admin: {
+        position: 'sidebar',
+        description: 'Which collections this tenant can access in the admin panel.',
+      },
+      access: {
+        create: ({ req }) => isSuperAdmin(req.user),
+        update: ({ req }) => isSuperAdmin(req.user),
+        read: ({ req }) => isSuperAdmin(req.user),
+      },
     },
   ],
 }

@@ -17,6 +17,7 @@ import { AuditLogs } from "./collections/AuditLogs";
 import { multiTenantPlugin } from "@payloadcms/plugin-multi-tenant";
 import { s3Storage } from "@payloadcms/storage-s3";
 import { isSuperAdmin } from "./access/isSuperAdmin";
+import { hasTenantPermission } from "./access/hasTenantPermission";
 import type { Config } from "./payload-types";
 import { getUserTenantIDs } from "./utilities/getUserTenantIDs";
 import { plugins } from "./plugins";
@@ -79,10 +80,22 @@ export default buildConfig({
     }),
     multiTenantPlugin<Config>({
       collections: {
-        pages: {},
-        posts: {},
-        media: {},
-        categories: {},
+        pages: {
+          accessResultOverride: ({ accessResult, req }) =>
+            hasTenantPermission({ req, collectionSlug: 'pages', accessResult }),
+        },
+        posts: {
+          accessResultOverride: ({ accessResult, req }) =>
+            hasTenantPermission({ req, collectionSlug: 'posts', accessResult }),
+        },
+        media: {
+          accessResultOverride: ({ accessResult, req }) =>
+            hasTenantPermission({ req, collectionSlug: 'media', accessResult }),
+        },
+        categories: {
+          accessResultOverride: ({ accessResult, req }) =>
+            hasTenantPermission({ req, collectionSlug: 'categories', accessResult }),
+        },
       },
       tenantField: {
         access: {
