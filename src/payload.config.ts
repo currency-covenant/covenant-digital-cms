@@ -7,6 +7,8 @@ import { fileURLToPath } from "url";
 
 import { Pages } from "./collections/Pages";
 import { Posts } from "./collections/Posts";
+import { Products } from "./collections/Products";
+import { Works } from "./collections/Works";
 import { Media } from "./collections/Media";
 import { Categories } from "./collections/Categories";
 import { Tenants } from "./collections/Tenants";
@@ -33,7 +35,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Pages, Posts, Media, Categories, Users, Tenants, APIKeys, Webhooks, AuditLogs],
+  collections: [Pages, Posts, Products, Works, Media, Categories, Users, Tenants, APIKeys, Webhooks, AuditLogs],
   // db: mongooseAdapter({
   //   url: process.env.DATABASE_URL as string,
   // }),
@@ -81,22 +83,30 @@ export default buildConfig({
     multiTenantPlugin<Config>({
       collections: {
         pages: {
-          accessResultOverride: ({ accessResult, req }) =>
+          accessResultOverride: ({ accessResult, req }: { accessResult: any; req: any }) =>
             hasTenantPermission({ req, collectionSlug: 'pages', accessResult }),
         },
         posts: {
-          accessResultOverride: ({ accessResult, req }) =>
+          accessResultOverride: ({ accessResult, req }: { accessResult: any; req: any }) =>
             hasTenantPermission({ req, collectionSlug: 'posts', accessResult }),
         },
+        products: {
+          accessResultOverride: ({ accessResult, req }: { accessResult: any; req: any }) =>
+            hasTenantPermission({ req, collectionSlug: 'products', accessResult }),
+        },
+        works: {
+          accessResultOverride: ({ accessResult, req }: { accessResult: any; req: any }) =>
+            hasTenantPermission({ req, collectionSlug: 'works', accessResult }),
+        },
         media: {
-          accessResultOverride: ({ accessResult, req }) =>
+          accessResultOverride: ({ accessResult, req }: { accessResult: any; req: any }) =>
             hasTenantPermission({ req, collectionSlug: 'media', accessResult }),
         },
         categories: {
-          accessResultOverride: ({ accessResult, req }) =>
+          accessResultOverride: ({ accessResult, req }: { accessResult: any; req: any }) =>
             hasTenantPermission({ req, collectionSlug: 'categories', accessResult }),
         },
-      },
+      } as any,
       tenantField: {
         access: {
           read: () => true,

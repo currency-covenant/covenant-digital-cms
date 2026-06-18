@@ -54,10 +54,12 @@ export const Tenants: CollectionConfig = {
       options: [
         { label: 'Pages', value: 'pages' },
         { label: 'Posts', value: 'posts' },
+        { label: 'Products', value: 'products' },
+        { label: 'Works', value: 'works' },
         { label: 'Media', value: 'media' },
         { label: 'Categories', value: 'categories' },
       ],
-      defaultValue: ['pages', 'posts', 'media', 'categories'],
+      defaultValue: ['pages', 'posts', 'products', 'works', 'media', 'categories'],
       admin: {
         position: 'sidebar',
         description: 'Which collections this tenant can access in the admin panel.',
