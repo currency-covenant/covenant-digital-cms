@@ -74,7 +74,7 @@ export const Tenants: CollectionConfig = {
       access: {
         create: ({ req }) => isSuperAdmin(req.user),
         update: ({ req }) => isSuperAdmin(req.user),
-        read: ({ req }) => isSuperAdmin(req.user),
+        read: ({ req }) => !!req.user,
       },
     },
   ],
