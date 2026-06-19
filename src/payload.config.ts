@@ -2,7 +2,7 @@ import { mongooseAdapter } from "@payloadcms/db-mongodb";
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import path from "path";
-import { buildConfig } from "payload";
+import { buildConfig, type Plugin } from "payload";
 import { fileURLToPath } from "url";
 
 import { Pages } from "./collections/Pages";
@@ -125,6 +125,17 @@ export default buildConfig({
       },
       userHasAccessToAllTenants: (user) => isSuperAdmin(user),
     }),
+    // Clean up the _watchTenant UI field injected by multi-tenant plugin into the Tenants collection.
+    // This component can cause a blank page crash on the tenant edit view.
+    ((config) => {
+      const tenantsCollection = config.collections?.find((c) => c.slug === 'tenants')
+      if (tenantsCollection?.fields) {
+        tenantsCollection.fields = tenantsCollection.fields.filter(
+          (f) => !('name' in f && f.name === '_watchTenant'),
+        )
+      }
+      return config
+    }) satisfies Plugin,
     ...plugins,
   ],
 });
