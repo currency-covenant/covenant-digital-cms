@@ -8,6 +8,9 @@ import { fileURLToPath } from "url";
 import { Pages } from "./collections/Pages";
 import { Posts } from "./collections/Posts";
 import { Products } from "./collections/Products";
+import { ShelfItems } from "./collections/ShelfItems";
+import { ShelfCategories } from "./collections/ShelfCategories";
+import { Authors } from "./collections/Authors";
 import { Works } from "./collections/Works";
 import { Media } from "./collections/Media";
 import { Categories } from "./collections/Categories";
@@ -35,7 +38,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Pages, Posts, Products, Works, Media, Categories, Users, Tenants, APIKeys, Webhooks, AuditLogs],
+  collections: [Pages, Posts, Products, ShelfItems, ShelfCategories, Authors, Works, Media, Categories, Users, Tenants, APIKeys, Webhooks, AuditLogs],
   // db: mongooseAdapter({
   //   url: process.env.DATABASE_URL as string,
   // }),
@@ -93,6 +96,18 @@ export default buildConfig({
         products: {
           accessResultOverride: ({ accessResult, req }: { accessResult: any; req: any }) =>
             hasTenantPermission({ req, collectionSlug: 'products', accessResult }),
+        },
+        "shelf-items": {
+          accessResultOverride: ({ accessResult, req }: { accessResult: any; req: any }) =>
+            hasTenantPermission({ req, collectionSlug: 'shelf-items', accessResult }),
+        },
+        "shelf-categories": {
+          accessResultOverride: ({ accessResult, req }: { accessResult: any; req: any }) =>
+            hasTenantPermission({ req, collectionSlug: 'shelf-categories', accessResult }),
+        },
+        authors: {
+          accessResultOverride: ({ accessResult, req }: { accessResult: any; req: any }) =>
+            hasTenantPermission({ req, collectionSlug: 'authors', accessResult }),
         },
         works: {
           accessResultOverride: ({ accessResult, req }: { accessResult: any; req: any }) =>

@@ -47,6 +47,7 @@
     "@payloadcms/eslint-config": "^3.28.0",
     "@payloadcms/graphql": "latest",
     "@swc/core": "^1.15.40",
+    "@types/node": "25.9.3",
     "@types/react": "19.2.9",
     "@types/react-dom": "19.2.3",
     "eslint": "^8.57.1",

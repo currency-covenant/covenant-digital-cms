@@ -70,6 +70,9 @@ export interface Config {
     pages: Page;
     posts: Post;
     products: Product;
+    'shelf-items': ShelfItem;
+    'shelf-categories': ShelfCategory;
+    authors: Author;
     works: Work;
     media: Media;
     categories: Category;
@@ -98,6 +101,9 @@ export interface Config {
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
+    'shelf-items': ShelfItemsSelect<false> | ShelfItemsSelect<true>;
+    'shelf-categories': ShelfCategoriesSelect<false> | ShelfCategoriesSelect<true>;
+    authors: AuthorsSelect<false> | AuthorsSelect<true>;
     works: WorksSelect<false> | WorksSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
@@ -245,7 +251,19 @@ export interface Tenant {
   /**
    * Which collections this tenant can access in the admin panel.
    */
-  permissions?: ('pages' | 'posts' | 'products' | 'works' | 'media' | 'categories')[] | null;
+  permissions?:
+    | (
+        | 'pages'
+        | 'posts'
+        | 'products'
+        | 'works'
+        | 'shelf-items'
+        | 'shelf-categories'
+        | 'authors'
+        | 'media'
+        | 'categories'
+      )[]
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -870,6 +888,78 @@ export interface Product {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "shelf-items".
+ */
+export interface ShelfItem {
+  id: number;
+  tenant?: (number | null) | Tenant;
+  title: string;
+  shelfCategories?: (number | ShelfCategory)[] | null;
+  description?: string | null;
+  coverImage?: (number | null) | Media;
+  rating?: number | null;
+  review?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  links?:
+    | {
+        label: string;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  publishedAt?: string | null;
+  authors?: (number | Author)[] | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "shelf-categories".
+ */
+export interface ShelfCategory {
+  id: number;
+  tenant?: (number | null) | Tenant;
+  title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "authors".
+ */
+export interface Author {
+  id: number;
+  tenant?: (number | null) | Tenant;
+  title: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "works".
  */
 export interface Work {
@@ -1156,6 +1246,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'products';
         value: number | Product;
+      } | null)
+    | ({
+        relationTo: 'shelf-items';
+        value: number | ShelfItem;
+      } | null)
+    | ({
+        relationTo: 'shelf-categories';
+        value: number | ShelfCategory;
+      } | null)
+    | ({
+        relationTo: 'authors';
+        value: number | Author;
       } | null)
     | ({
         relationTo: 'works';
@@ -1460,6 +1562,55 @@ export interface ProductsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "shelf-items_select".
+ */
+export interface ShelfItemsSelect<T extends boolean = true> {
+  tenant?: T;
+  title?: T;
+  shelfCategories?: T;
+  description?: T;
+  coverImage?: T;
+  rating?: T;
+  review?: T;
+  links?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        id?: T;
+      };
+  publishedAt?: T;
+  authors?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "shelf-categories_select".
+ */
+export interface ShelfCategoriesSelect<T extends boolean = true> {
+  tenant?: T;
+  title?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "authors_select".
+ */
+export interface AuthorsSelect<T extends boolean = true> {
+  tenant?: T;
+  title?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1999,6 +2150,10 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'products';
           value: number | Product;
+        } | null)
+      | ({
+          relationTo: 'shelf-items';
+          value: number | ShelfItem;
         } | null)
       | ({
           relationTo: 'works';
