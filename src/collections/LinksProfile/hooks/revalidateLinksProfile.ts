@@ -2,17 +2,17 @@ import type { CollectionAfterChangeHook, CollectionAfterDeleteHook } from 'paylo
 
 import { revalidatePath, revalidateTag } from 'next/cache'
 
-export const revalidateSocialLink: CollectionAfterChangeHook = ({
+export const revalidateLinksProfile: CollectionAfterChangeHook = ({
   doc,
   previousDoc,
   req: { payload, context },
 }) => {
   if (!context.disableRevalidate) {
     if (doc._status === 'published') {
-      payload.logger.info('Revalidating social-links')
+      payload.logger.info('Revalidating links-profile')
 
       revalidatePath('/links')
-      revalidateTag('social-links-sitemap')
+      revalidateTag('links-profile-sitemap')
     }
   }
   return doc
@@ -21,7 +21,7 @@ export const revalidateSocialLink: CollectionAfterChangeHook = ({
 export const revalidateDelete: CollectionAfterDeleteHook = ({ doc, req: { context } }) => {
   if (!context.disableRevalidate) {
     revalidatePath('/links')
-    revalidateTag('social-links-sitemap')
+    revalidateTag('links-profile-sitemap')
   }
 
   return doc

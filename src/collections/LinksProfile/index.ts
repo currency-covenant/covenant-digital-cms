@@ -5,10 +5,10 @@ import { getUserTenantIDsByRoles } from '@/access/hasRole'
 import { setTenantFromUser } from '@/hooks/setTenantFromUser'
 import { triggerWebhookAfterChange, triggerWebhookAfterDelete } from '@/hooks/triggerWebhooks'
 import { logAuditAfterChange, logAuditAfterDelete } from '@/hooks/logAuditEvent'
-import { revalidateSocialLink, revalidateDelete } from './hooks/revalidateSocialLinks'
+import { revalidateLinksProfile, revalidateDelete } from './hooks/revalidateLinksProfile'
 
-export const SocialLinks: CollectionConfig = {
-  slug: 'social-links',
+export const LinksProfile: CollectionConfig = {
+  slug: 'links-profile',
   access: {
     create: ({ req, data }) => {
       if (!req.user) return false
@@ -37,45 +37,77 @@ export const SocialLinks: CollectionConfig = {
     },
   },
   admin: {
-    defaultColumns: ['title', 'url', 'updatedAt'],
-    useAsTitle: 'title',
+    defaultColumns: ['name', 'handle', 'updatedAt'],
+    useAsTitle: 'name',
   },
   fields: [
     {
-      name: 'title',
+      name: 'name',
       type: 'text',
       required: true,
+      label: 'Display Name',
     },
     {
-      name: 'url',
+      name: 'handle',
       type: 'text',
-      required: true,
+      label: 'Social Handle (e.g. @lbdluxe)',
     },
     {
-      name: 'iconType',
-      type: 'select',
-      defaultValue: 'auto',
-      options: [
-        { label: 'Auto (from URL)', value: 'auto' },
-        { label: 'Custom upload', value: 'custom' },
-      ],
-      admin: {
-        position: 'sidebar',
-      },
+      name: 'bio',
+      type: 'textarea',
+      label: 'Bio Description',
     },
     {
-      name: 'icon',
+      name: 'profileImage',
       type: 'upload',
       relationTo: 'media',
-      admin: {
-        position: 'sidebar',
-        condition: (data) => data?.iconType === 'custom',
+      label: 'Profile Image',
+    },
+    {
+      name: 'socialLinks',
+      type: 'array',
+      label: 'Social Links',
+      labels: {
+        singular: 'Social Link',
+        plural: 'Social Links',
       },
+      fields: [
+        {
+          name: 'title',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'url',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'iconType',
+          type: 'select',
+          defaultValue: 'auto',
+          options: [
+            { label: 'Auto (from URL)', value: 'auto' },
+            { label: 'Custom upload', value: 'custom' },
+          ],
+          admin: {
+            width: '50%',
+          },
+        },
+        {
+          name: 'icon',
+          type: 'upload',
+          relationTo: 'media',
+          admin: {
+            condition: (_, siblingData) => siblingData?.iconType === 'custom',
+          },
+        },
+      ],
     },
   ],
   hooks: {
     beforeValidate: [setTenantFromUser],
-    afterChange: [revalidateSocialLink, triggerWebhookAfterChange, logAuditAfterChange],
+    afterChange: [revalidateLinksProfile, triggerWebhookAfterChange, logAuditAfterChange],
     afterDelete: [revalidateDelete, triggerWebhookAfterDelete, logAuditAfterDelete],
   },
   versions: {

@@ -1,7 +1,9 @@
 import type { AccessResult } from 'payload'
+import { getTenantFromCookie } from '@payloadcms/plugin-multi-tenant/utilities'
 
 import { isSuperAdmin } from './isSuperAdmin'
 import { extractID } from '@/utilities/extractID'
+import { getCollectionIDType } from '@/utilities/getCollectionIDType'
 
 export const hasTenantPermission = async ({
   req,
@@ -12,28 +14,45 @@ export const hasTenantPermission = async ({
   collectionSlug: string
   accessResult: AccessResult
 }): Promise<AccessResult> => {
-  // Public API (BFF proxy) — always allow
   if (!req.user) return accessResult
-
-  // Super admins bypass
   if (isSuperAdmin(req.user)) return accessResult
 
-  // Get user's first tenant
-  const tenantId = extractID(req.user?.tenants?.[0]?.tenant)
-  if (!tenantId) return false
+  const selectedTenant = getTenantFromCookie(
+    req.headers,
+    getCollectionIDType({ payload: req.payload, collectionSlug: 'tenants' }),
+  )
 
-  // Cache permissions per request
-  if (!req.context?.tenantPermissions) {
-    const tenant = await req.payload.findByID({
-      collection: 'tenants',
-      id: tenantId,
-      depth: 0,
-      select: { permissions: true },
-    })
-    req.context.tenantPermissions = (tenant?.permissions as string[]) || []
+  const tenantIDsToCheck: (string | number)[] = []
+  if (selectedTenant) {
+    tenantIDsToCheck.push(selectedTenant)
+  } else {
+    const userTenants = req.user?.tenants || []
+    for (const t of userTenants) {
+      const id = extractID(t.tenant)
+      if (id) tenantIDsToCheck.push(id)
+    }
   }
 
-  if (!req.context.tenantPermissions.includes(collectionSlug)) return false
+  if (tenantIDsToCheck.length === 0) return false
 
-  return accessResult
+  if (!req.context) req.context = {}
+  if (!req.context.tenantPermissions) req.context.tenantPermissions = {}
+
+  for (const tenantId of tenantIDsToCheck) {
+    if (req.context.tenantPermissions[tenantId] === undefined) {
+      const tenant = await req.payload.findByID({
+        collection: 'tenants',
+        id: tenantId,
+        depth: 0,
+        select: { permissions: true },
+      })
+      req.context.tenantPermissions[tenantId] = (tenant?.permissions as string[]) || []
+    }
+
+    if (req.context.tenantPermissions[tenantId].includes(collectionSlug)) {
+      return accessResult
+    }
+  }
+
+  return false
 }

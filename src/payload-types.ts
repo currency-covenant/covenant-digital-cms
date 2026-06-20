@@ -73,7 +73,7 @@ export interface Config {
     'shelf-items': ShelfItem;
     'shelf-categories': ShelfCategory;
     authors: Author;
-    'social-links': SocialLink;
+    'links-profile': LinksProfile;
     works: Work;
     media: Media;
     categories: Category;
@@ -105,7 +105,7 @@ export interface Config {
     'shelf-items': ShelfItemsSelect<false> | ShelfItemsSelect<true>;
     'shelf-categories': ShelfCategoriesSelect<false> | ShelfCategoriesSelect<true>;
     authors: AuthorsSelect<false> | AuthorsSelect<true>;
-    'social-links': SocialLinksSelect<false> | SocialLinksSelect<true>;
+    'links-profile': LinksProfileSelect<false> | LinksProfileSelect<true>;
     works: WorksSelect<false> | WorksSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
@@ -262,7 +262,7 @@ export interface Tenant {
         | 'shelf-items'
         | 'shelf-categories'
         | 'authors'
-        | 'social-links'
+        | 'links-profile'
         | 'media'
         | 'categories'
       )[]
@@ -963,15 +963,24 @@ export interface Author {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "social-links".
+ * via the `definition` "links-profile".
  */
-export interface SocialLink {
+export interface LinksProfile {
   id: number;
   tenant?: (number | null) | Tenant;
-  title: string;
-  url: string;
-  iconType?: ('auto' | 'custom') | null;
-  icon?: (number | null) | Media;
+  name: string;
+  handle?: string | null;
+  bio?: string | null;
+  profileImage?: (number | null) | Media;
+  socialLinks?:
+    | {
+        title: string;
+        url: string;
+        iconType?: ('auto' | 'custom') | null;
+        icon?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -1278,8 +1287,8 @@ export interface PayloadLockedDocument {
         value: number | Author;
       } | null)
     | ({
-        relationTo: 'social-links';
-        value: number | SocialLink;
+        relationTo: 'links-profile';
+        value: number | LinksProfile;
       } | null)
     | ({
         relationTo: 'works';
@@ -1636,14 +1645,23 @@ export interface AuthorsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "social-links_select".
+ * via the `definition` "links-profile_select".
  */
-export interface SocialLinksSelect<T extends boolean = true> {
+export interface LinksProfileSelect<T extends boolean = true> {
   tenant?: T;
-  title?: T;
-  url?: T;
-  iconType?: T;
-  icon?: T;
+  name?: T;
+  handle?: T;
+  bio?: T;
+  profileImage?: T;
+  socialLinks?:
+    | T
+    | {
+        title?: T;
+        url?: T;
+        iconType?: T;
+        icon?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -2192,8 +2210,8 @@ export interface TaskSchedulePublish {
           value: number | ShelfItem;
         } | null)
       | ({
-          relationTo: 'social-links';
-          value: number | SocialLink;
+          relationTo: 'links-profile';
+          value: number | LinksProfile;
         } | null)
       | ({
           relationTo: 'works';
