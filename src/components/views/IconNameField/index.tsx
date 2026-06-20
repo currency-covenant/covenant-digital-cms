@@ -16,6 +16,7 @@ const IconNameField: React.FC<Props> = ({ path, name }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [filteredIcons, setFilteredIcons] = useState<string[]>([])
   const [highlightedIndex, setHighlightedIndex] = useState(-1)
+  const [hasUserTyped, setHasUserTyped] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
@@ -30,13 +31,13 @@ const IconNameField: React.FC<Props> = ({ path, name }) => {
         .filter((icon) => icon.toLowerCase().includes(query))
         .slice(0, 10)
       setFilteredIcons(filtered)
-      setIsOpen(filtered.length > 0)
+      setIsOpen(hasUserTyped && filtered.length > 0)
       setHighlightedIndex(-1)
     } else {
       setIsOpen(false)
       setFilteredIcons([])
     }
-  }, [inputValue])
+  }, [inputValue, hasUserTyped])
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -91,6 +92,7 @@ const IconNameField: React.FC<Props> = ({ path, name }) => {
     const newValue = e.target.value
     setInputValue(newValue)
     setValue(newValue)
+    setHasUserTyped(true)
   }
 
   return (
@@ -103,6 +105,7 @@ const IconNameField: React.FC<Props> = ({ path, name }) => {
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
         onFocus={() => {
+          setHasUserTyped(true)
           if (filteredIcons.length > 0) setIsOpen(true)
         }}
         placeholder="Type to search icons..."
