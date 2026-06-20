@@ -998,7 +998,7 @@ export interface ProfileLink {
   title: string;
   url: string;
   linkType: 'lg' | 'sm';
-  iconSet?: ('si' | 'sl') | null;
+  iconSet?: ('si' | 'sl' | 'lucide') | null;
   iconName?: string | null;
   hexColor?: string | null;
   coverImage?: (number | null) | Media;

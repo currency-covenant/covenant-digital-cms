@@ -73,6 +73,7 @@ export const ProfileLinks: CollectionConfig = {
       options: [
         { label: 'Simple Icons (Si)', value: 'si' },
         { label: 'Simple Line Icons (Sl)', value: 'sl' },
+        { label: 'Lucide Icons', value: 'lucide' },
       ],
       label: 'Icon Library',
       admin: {
@@ -82,7 +83,7 @@ export const ProfileLinks: CollectionConfig = {
     {
       name: 'iconName',
       type: 'text',
-      label: 'Icon Name (e.g. SiInstagram, SlBag)',
+      label: 'Icon Name (Si/Sl: e.g. SiInstagram, SlBag | Lucide: e.g. Instagram, Mail)',
     },
     {
       name: 'hexColor',
