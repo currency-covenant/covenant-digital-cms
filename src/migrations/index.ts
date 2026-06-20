@@ -5,6 +5,7 @@ import * as migration_20260620_drop_social_links from './20260620_drop_social_li
 import * as migration_20260620_drop_links_profile_correct from './20260620_drop_links_profile_correct';
 import * as migration_20260620_fix_tenants_permissions from './20260620_fix_tenants_permissions';
 import * as migration_20260620_profile_links from './20260620_profile_links';
+import * as migration_20260620_content_network from './20260620_content_network';
 
 export const migrations = [
   {
@@ -41,5 +42,10 @@ export const migrations = [
     up: migration_20260620_profile_links.up,
     down: migration_20260620_profile_links.down,
     name: '20260620_profile_links'
+  },
+  {
+    up: migration_20260620_content_network.up,
+    down: migration_20260620_content_network.down,
+    name: '20260620_content_network'
   },
 ];

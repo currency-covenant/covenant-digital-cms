@@ -75,6 +75,7 @@ export interface Config {
     authors: Author;
     'links-profile': LinksProfile;
     'profile-links': ProfileLink;
+    'content-network': ContentNetwork;
     works: Work;
     media: Media;
     categories: Category;
@@ -108,6 +109,7 @@ export interface Config {
     authors: AuthorsSelect<false> | AuthorsSelect<true>;
     'links-profile': LinksProfileSelect<false> | LinksProfileSelect<true>;
     'profile-links': ProfileLinksSelect<false> | ProfileLinksSelect<true>;
+    'content-network': ContentNetworkSelect<false> | ContentNetworkSelect<true>;
     works: WorksSelect<false> | WorksSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
@@ -266,6 +268,7 @@ export interface Tenant {
         | 'authors'
         | 'links-profile'
         | 'profile-links'
+        | 'content-network'
         | 'media'
         | 'categories'
       )[]
@@ -1009,6 +1012,22 @@ export interface ProfileLink {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "content-network".
+ */
+export interface ContentNetwork {
+  id: number;
+  tenant?: (number | null) | Tenant;
+  title: string;
+  url: string;
+  hexColor?: string | null;
+  networkType: 'rumble' | 'youtube';
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "works".
  */
 export interface Work {
@@ -1315,6 +1334,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'profile-links';
         value: number | ProfileLink;
+      } | null)
+    | ({
+        relationTo: 'content-network';
+        value: number | ContentNetwork;
       } | null)
     | ({
         relationTo: 'works';
@@ -1705,6 +1728,21 @@ export interface ProfileLinksSelect<T extends boolean = true> {
   iconName?: T;
   hexColor?: T;
   coverImage?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "content-network_select".
+ */
+export interface ContentNetworkSelect<T extends boolean = true> {
+  tenant?: T;
+  title?: T;
+  url?: T;
+  hexColor?: T;
+  networkType?: T;
   order?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -2260,6 +2298,10 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'profile-links';
           value: number | ProfileLink;
+        } | null)
+      | ({
+          relationTo: 'content-network';
+          value: number | ContentNetwork;
         } | null)
       | ({
           relationTo: 'works';

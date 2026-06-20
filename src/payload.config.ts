@@ -13,6 +13,7 @@ import { ShelfCategories } from "./collections/ShelfCategories";
 import { Authors } from "./collections/Authors";
 import { LinksProfile } from "./collections/LinksProfile";
 import { ProfileLinks } from "./collections/ProfileLinks";
+import { ContentNetwork } from "./collections/ContentNetwork";
 import { Works } from "./collections/Works";
 import { Media } from "./collections/Media";
 import { Categories } from "./collections/Categories";
@@ -40,7 +41,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Pages, Posts, Products, ShelfItems, ShelfCategories, Authors, LinksProfile, ProfileLinks, Works, Media, Categories, Users, Tenants, APIKeys, Webhooks, AuditLogs],
+  collections: [Pages, Posts, Products, ShelfItems, ShelfCategories, Authors, LinksProfile, ProfileLinks, ContentNetwork, Works, Media, Categories, Users, Tenants, APIKeys, Webhooks, AuditLogs],
   // db: mongooseAdapter({
   //   url: process.env.DATABASE_URL as string,
   // }),
@@ -118,6 +119,10 @@ export default buildConfig({
         "profile-links": {
           accessResultOverride: ({ accessResult, req }: { accessResult: any; req: any }) =>
             hasTenantPermission({ req, collectionSlug: 'profile-links', accessResult }),
+        },
+        "content-network": {
+          accessResultOverride: ({ accessResult, req }: { accessResult: any; req: any }) =>
+            hasTenantPermission({ req, collectionSlug: 'content-network', accessResult }),
         },
         works: {
           accessResultOverride: ({ accessResult, req }: { accessResult: any; req: any }) =>
