@@ -73,6 +73,7 @@ export interface Config {
     'shelf-items': ShelfItem;
     'shelf-categories': ShelfCategory;
     authors: Author;
+    'social-links': SocialLink;
     works: Work;
     media: Media;
     categories: Category;
@@ -104,6 +105,7 @@ export interface Config {
     'shelf-items': ShelfItemsSelect<false> | ShelfItemsSelect<true>;
     'shelf-categories': ShelfCategoriesSelect<false> | ShelfCategoriesSelect<true>;
     authors: AuthorsSelect<false> | AuthorsSelect<true>;
+    'social-links': SocialLinksSelect<false> | SocialLinksSelect<true>;
     works: WorksSelect<false> | WorksSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
@@ -260,6 +262,7 @@ export interface Tenant {
         | 'shelf-items'
         | 'shelf-categories'
         | 'authors'
+        | 'social-links'
         | 'media'
         | 'categories'
       )[]
@@ -960,6 +963,21 @@ export interface Author {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "social-links".
+ */
+export interface SocialLink {
+  id: number;
+  tenant?: (number | null) | Tenant;
+  title: string;
+  url: string;
+  iconType?: ('auto' | 'custom') | null;
+  icon?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "works".
  */
 export interface Work {
@@ -1258,6 +1276,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'authors';
         value: number | Author;
+      } | null)
+    | ({
+        relationTo: 'social-links';
+        value: number | SocialLink;
       } | null)
     | ({
         relationTo: 'works';
@@ -1611,6 +1633,20 @@ export interface AuthorsSelect<T extends boolean = true> {
   title?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "social-links_select".
+ */
+export interface SocialLinksSelect<T extends boolean = true> {
+  tenant?: T;
+  title?: T;
+  url?: T;
+  iconType?: T;
+  icon?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2154,6 +2190,10 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'shelf-items';
           value: number | ShelfItem;
+        } | null)
+      | ({
+          relationTo: 'social-links';
+          value: number | SocialLink;
         } | null)
       | ({
           relationTo: 'works';
