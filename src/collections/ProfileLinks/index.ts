@@ -84,6 +84,11 @@ export const ProfileLinks: CollectionConfig = {
       name: 'iconName',
       type: 'text',
       label: 'Icon Name (Si/Sl: e.g. SiInstagram, SlBag | Lucide: e.g. Instagram, Mail)',
+      admin: {
+        components: {
+          Field: '/components/views/IconNameField',
+        },
+      },
     },
     {
       name: 'hexColor',
