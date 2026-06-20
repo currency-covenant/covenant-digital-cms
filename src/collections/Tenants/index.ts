@@ -76,8 +76,16 @@ export const Tenants: CollectionConfig = {
         description: 'Which collections this tenant can access in the admin panel.',
       },
       access: {
-        create: ({ req }) => isSuperAdmin(req.user),
-        update: ({ req }) => isSuperAdmin(req.user),
+        create: ({ req }) => {
+          if (!req.user) return false
+          if (isSuperAdmin(req.user)) return true
+          return getUserTenantIDs(req.user, 'tenant-admin').length > 0
+        },
+        update: ({ req }) => {
+          if (!req.user) return false
+          if (isSuperAdmin(req.user)) return true
+          return getUserTenantIDs(req.user, 'tenant-admin').length > 0
+        },
         read: ({ req }) => !!req.user,
       },
     },
