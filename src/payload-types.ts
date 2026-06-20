@@ -74,6 +74,7 @@ export interface Config {
     'shelf-categories': ShelfCategory;
     authors: Author;
     'links-profile': LinksProfile;
+    'profile-links': ProfileLink;
     works: Work;
     media: Media;
     categories: Category;
@@ -106,6 +107,7 @@ export interface Config {
     'shelf-categories': ShelfCategoriesSelect<false> | ShelfCategoriesSelect<true>;
     authors: AuthorsSelect<false> | AuthorsSelect<true>;
     'links-profile': LinksProfileSelect<false> | LinksProfileSelect<true>;
+    'profile-links': ProfileLinksSelect<false> | ProfileLinksSelect<true>;
     works: WorksSelect<false> | WorksSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
@@ -263,6 +265,7 @@ export interface Tenant {
         | 'shelf-categories'
         | 'authors'
         | 'links-profile'
+        | 'profile-links'
         | 'media'
         | 'categories'
       )[]
@@ -987,6 +990,25 @@ export interface LinksProfile {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "profile-links".
+ */
+export interface ProfileLink {
+  id: number;
+  tenant?: (number | null) | Tenant;
+  title: string;
+  url: string;
+  linkType: 'lg' | 'sm';
+  iconSet?: ('si' | 'sl') | null;
+  iconName?: string | null;
+  hexColor?: string | null;
+  coverImage?: (number | null) | Media;
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "works".
  */
 export interface Work {
@@ -1289,6 +1311,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'links-profile';
         value: number | LinksProfile;
+      } | null)
+    | ({
+        relationTo: 'profile-links';
+        value: number | ProfileLink;
       } | null)
     | ({
         relationTo: 'works';
@@ -1662,6 +1688,24 @@ export interface LinksProfileSelect<T extends boolean = true> {
         icon?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "profile-links_select".
+ */
+export interface ProfileLinksSelect<T extends boolean = true> {
+  tenant?: T;
+  title?: T;
+  url?: T;
+  linkType?: T;
+  iconSet?: T;
+  iconName?: T;
+  hexColor?: T;
+  coverImage?: T;
+  order?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -2212,6 +2256,10 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'links-profile';
           value: number | LinksProfile;
+        } | null)
+      | ({
+          relationTo: 'profile-links';
+          value: number | ProfileLink;
         } | null)
       | ({
           relationTo: 'works';

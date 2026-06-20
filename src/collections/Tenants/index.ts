@@ -67,10 +67,11 @@ export const Tenants: CollectionConfig = {
         { label: 'Shelf Categories', value: 'shelf-categories' },
         { label: 'Authors', value: 'authors' },
         { label: 'Links Profile', value: 'links-profile' },
+        { label: 'Profile Links', value: 'profile-links' },
         { label: 'Media', value: 'media' },
         { label: 'Categories', value: 'categories' },
       ],
-      defaultValue: ['pages', 'posts', 'products', 'works', 'shelf-items', 'shelf-categories', 'authors', 'links-profile', 'media', 'categories'],
+      defaultValue: ['pages', 'posts', 'products', 'works', 'shelf-items', 'shelf-categories', 'authors', 'links-profile', 'profile-links', 'media', 'categories'],
       admin: {
         position: 'sidebar',
         description: 'Which collections this tenant can access in the admin panel.',
