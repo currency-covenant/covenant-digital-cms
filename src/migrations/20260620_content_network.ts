@@ -1,13 +1,13 @@
-import type { Migration } from 'payload'
+import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
 
-export const up: Migration = async ({ sql }) => {
-  await sql.query`
+export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
+  await db.execute(sql`
     ALTER TYPE "public"."enum_tenants_permissions" ADD VALUE IF NOT EXISTS 'content-network' BEFORE 'media';
-  `
+  `)
 }
 
-export const down: Migration = async ({ sql }) => {
-  await sql.query`
+export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
+  await db.execute(sql`
     ALTER TYPE "public"."enum_tenants_permissions" DROP VALUE IF EXISTS 'content-network';
-  `
+  `)
 }
