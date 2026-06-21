@@ -68,6 +68,7 @@ export default buildConfig({
   ],
   plugins: [
     s3Storage({
+      acl: 'public-read',
       bucket: process.env.S3_BUCKET!,
       config: {
         region: process.env.S3_REGION!,
@@ -80,7 +81,7 @@ export default buildConfig({
       collections: {
         media: {
           prefix: "media",
-          disablePayloadAccessControl: true,
+          disablePayloadAccessControl: false,
           generateFileURL: ({ filename, prefix }) =>
             `https://s3.${process.env.S3_REGION}.amazonaws.com/${process.env.S3_BUCKET}/${prefix ? prefix + '/' : ''}${filename}`,
         },
