@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
 import { Card } from '@/components/ui/card'
@@ -98,9 +99,11 @@ export const ProfileBlock = (props: ProfileBlockProps) => {
           "
         >
           {imageUrl ? (
-            <img
+            <Image
               alt="Profile photo"
               src={imageUrl}
+              width={304}
+              height={304}
               className="w-76 h-76 object-cover rounded-xl filter grayscale"
             />
           ) : (

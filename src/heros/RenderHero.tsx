@@ -1,5 +1,6 @@
 import type { Page } from '@payload-types'
 
+import Image from 'next/image'
 import React from 'react'
 
 type Hero = NonNullable<Page['hero']>
@@ -40,9 +41,11 @@ export const RenderHero = ({ hero }: { hero?: Hero }) => {
             {hero.richText ? 'Hero Section' : ''}
           </div>
           {mediaUrl && (
-            <img
+            <Image
               src={mediaUrl}
               alt=""
+              width={1200}
+              height={675}
               className="w-full rounded-xl shadow-lg"
             />
           )}
