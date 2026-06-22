@@ -5,14 +5,14 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "_dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
+    "_dev": "cross-env NODE_OPTIONS='--no-deprecation --max-old-space-size=2048' next dev",
     "build": "cross-env NODE_OPTIONS=--no-deprecation next build",
-    "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
+    "dev": "cross-env NODE_OPTIONS='--no-deprecation --max-old-space-size=2048' next dev",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
     "generate:schema": "payload-graphql generate:schema",
     "generate:types": "payload generate:types",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
-    "start": "cross-env NODE_OPTIONS=--no-deprecation next start"
+    "start": "cross-env NODE_OPTIONS='--no-deprecation --max-old-space-size=4096' next start"
   },
   "dependencies": {
     "@payloadcms/db-mongodb": "3.85.0",
@@ -28,15 +28,12 @@
     "@payloadcms/storage-s3": "^3.85.0",
     "@payloadcms/ui": "3.85.0",
     "@tailwindcss/postcss": "^4.3.0",
-    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cross-env": "^7.0.3",
-    "dotenv": "^8.6.0",
     "graphql": "^16.14.0",
     "next": "15.4.11",
     "payload": "3.85.0",
     "postcss": "^8.5.15",
-    "qs-esm": "8.0.1",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "sharp": "0.32.6",
