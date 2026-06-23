@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import { isSuperAdmin } from '@/access/isSuperAdmin'
 import { getUserTenantIDsByRoles } from '@/access/hasRole'
+import { setTenantFromUser } from '@/hooks/setTenantFromUser'
 import { slugField } from 'payload'
 
 export const ShelfCategories: CollectionConfig = {
@@ -46,4 +47,7 @@ export const ShelfCategories: CollectionConfig = {
       position: undefined,
     }),
   ],
+  hooks: {
+    beforeValidate: [setTenantFromUser],
+  },
 }
