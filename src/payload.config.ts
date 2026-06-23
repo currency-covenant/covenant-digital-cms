@@ -7,7 +7,6 @@ import { fileURLToPath } from "url";
 
 import { Pages } from "./collections/Pages";
 import { Posts } from "./collections/Posts";
-import { Products } from "./collections/Products";
 import { ShelfItems } from "./collections/ShelfItems";
 import { ShelfCategories } from "./collections/ShelfCategories";
 import { Authors } from "./collections/Authors";
@@ -41,7 +40,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Pages, Posts, Products, ShelfItems, ShelfCategories, Authors, LinksProfile, ProfileLinks, ContentNetwork, Works, Media, Categories, Users, Tenants, APIKeys, Webhooks, AuditLogs],
+  collections: [Pages, Posts, ShelfItems, ShelfCategories, Authors, LinksProfile, ProfileLinks, ContentNetwork, Works, Media, Categories, Users, Tenants, APIKeys, Webhooks, AuditLogs],
   // db: mongooseAdapter({
   //   url: process.env.DATABASE_URL as string,
   // }),
@@ -96,10 +95,6 @@ export default buildConfig({
         posts: {
           accessResultOverride: ({ accessResult, req }: { accessResult: any; req: any }) =>
             hasTenantPermission({ req, collectionSlug: 'posts', accessResult }),
-        },
-        products: {
-          accessResultOverride: ({ accessResult, req }: { accessResult: any; req: any }) =>
-            hasTenantPermission({ req, collectionSlug: 'products', accessResult }),
         },
         "shelf-items": {
           accessResultOverride: ({ accessResult, req }: { accessResult: any; req: any }) =>

@@ -69,7 +69,6 @@ export interface Config {
   collections: {
     pages: Page;
     posts: Post;
-    products: Product;
     'shelf-items': ShelfItem;
     'shelf-categories': ShelfCategory;
     authors: Author;
@@ -103,7 +102,6 @@ export interface Config {
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
-    products: ProductsSelect<false> | ProductsSelect<true>;
     'shelf-items': ShelfItemsSelect<false> | ShelfItemsSelect<true>;
     'shelf-categories': ShelfCategoriesSelect<false> | ShelfCategoriesSelect<true>;
     authors: AuthorsSelect<false> | AuthorsSelect<true>;
@@ -220,7 +218,15 @@ export interface Page {
       | null;
     media?: (number | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock | ProfileBlock)[];
+  layout: (
+    | CallToActionBlock
+    | ContentBlock
+    | MediaBlock
+    | ArchiveBlock
+    | FormBlock
+    | ProfileBlock
+    | ProductGridBlock
+  )[];
   meta?: {
     title?: string | null;
     /**
@@ -868,32 +874,20 @@ export interface ProfileBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "products".
+ * via the `definition` "ProductGridBlock".
  */
-export interface Product {
-  id: number;
-  tenant?: (number | null) | Tenant;
-  name: string;
-  description: string;
-  projectLink?: string | null;
-  directory?: boolean | null;
-  beta?: boolean | null;
-  iconImage?: (number | null) | Media;
-  images?:
-    | {
-        image?: (number | null) | Media;
-        id?: string | null;
-      }[]
-    | null;
-  publishedAt?: string | null;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
+export interface ProductGridBlock {
+  items: {
+    name: string;
+    description: string;
+    projectLink?: string | null;
+    beta?: boolean | null;
+    iconImage?: (number | null) | Media;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'productGrid';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1312,10 +1306,6 @@ export interface PayloadLockedDocument {
         value: number | Post;
       } | null)
     | ({
-        relationTo: 'products';
-        value: number | Product;
-      } | null)
-    | ({
         relationTo: 'shelf-items';
         value: number | ShelfItem;
       } | null)
@@ -1471,6 +1461,7 @@ export interface PagesSelect<T extends boolean = true> {
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
         profile?: T | ProfileBlockSelect<T>;
+        productGrid?: T | ProductGridBlockSelect<T>;
       };
   meta?:
     | T
@@ -1588,6 +1579,24 @@ export interface ProfileBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProductGridBlock_select".
+ */
+export interface ProductGridBlockSelect<T extends boolean = true> {
+  items?:
+    | T
+    | {
+        name?: T;
+        description?: T;
+        projectLink?: T;
+        beta?: T;
+        iconImage?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts_select".
  */
 export interface PostsSelect<T extends boolean = true> {
@@ -1612,31 +1621,6 @@ export interface PostsSelect<T extends boolean = true> {
         id?: T;
         name?: T;
       };
-  generateSlug?: T;
-  slug?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "products_select".
- */
-export interface ProductsSelect<T extends boolean = true> {
-  tenant?: T;
-  name?: T;
-  description?: T;
-  projectLink?: T;
-  directory?: T;
-  beta?: T;
-  iconImage?: T;
-  images?:
-    | T
-    | {
-        image?: T;
-        id?: T;
-      };
-  publishedAt?: T;
   generateSlug?: T;
   slug?: T;
   updatedAt?: T;
@@ -2282,10 +2266,6 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'posts';
           value: number | Post;
-        } | null)
-      | ({
-          relationTo: 'products';
-          value: number | Product;
         } | null)
       | ({
           relationTo: 'shelf-items';
