@@ -75,7 +75,6 @@ export interface Config {
     'links-profile': LinksProfile;
     'profile-links': ProfileLink;
     'content-network': ContentNetwork;
-    works: Work;
     media: Media;
     categories: Category;
     users: User;
@@ -108,7 +107,6 @@ export interface Config {
     'links-profile': LinksProfileSelect<false> | LinksProfileSelect<true>;
     'profile-links': ProfileLinksSelect<false> | ProfileLinksSelect<true>;
     'content-network': ContentNetworkSelect<false> | ContentNetworkSelect<true>;
-    works: WorksSelect<false> | WorksSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
@@ -226,6 +224,7 @@ export interface Page {
     | FormBlock
     | ProfileBlock
     | ProductGridBlock
+    | WorkGridBlock
   )[];
   meta?: {
     title?: string | null;
@@ -891,6 +890,31 @@ export interface ProductGridBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WorkGridBlock".
+ */
+export interface WorkGridBlock {
+  items: {
+    name: string;
+    description: string;
+    projectLink?: string | null;
+    repoLink?: string | null;
+    directory?: boolean | null;
+    beta?: boolean | null;
+    iconImage?: (number | null) | Media;
+    images?:
+      | {
+          image?: (number | null) | Media;
+          id?: string | null;
+        }[]
+      | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'workGrid';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "shelf-items".
  */
 export interface ShelfItem {
@@ -1016,36 +1040,6 @@ export interface ContentNetwork {
   hexColor?: string | null;
   networkType: 'rumble' | 'youtube';
   order?: number | null;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "works".
- */
-export interface Work {
-  id: number;
-  tenant?: (number | null) | Tenant;
-  name: string;
-  description: string;
-  projectLink?: string | null;
-  repoLink?: string | null;
-  directory?: boolean | null;
-  beta?: boolean | null;
-  iconImage?: (number | null) | Media;
-  images?:
-    | {
-        image?: (number | null) | Media;
-        id?: string | null;
-      }[]
-    | null;
-  publishedAt?: string | null;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -1330,10 +1324,6 @@ export interface PayloadLockedDocument {
         value: number | ContentNetwork;
       } | null)
     | ({
-        relationTo: 'works';
-        value: number | Work;
-      } | null)
-    | ({
         relationTo: 'media';
         value: number | Media;
       } | null)
@@ -1462,6 +1452,7 @@ export interface PagesSelect<T extends boolean = true> {
         formBlock?: T | FormBlockSelect<T>;
         profile?: T | ProfileBlockSelect<T>;
         productGrid?: T | ProductGridBlockSelect<T>;
+        workGrid?: T | WorkGridBlockSelect<T>;
       };
   meta?:
     | T
@@ -1590,6 +1581,32 @@ export interface ProductGridBlockSelect<T extends boolean = true> {
         projectLink?: T;
         beta?: T;
         iconImage?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WorkGridBlock_select".
+ */
+export interface WorkGridBlockSelect<T extends boolean = true> {
+  items?:
+    | T
+    | {
+        name?: T;
+        description?: T;
+        projectLink?: T;
+        repoLink?: T;
+        directory?: T;
+        beta?: T;
+        iconImage?: T;
+        images?:
+          | T
+          | {
+              image?: T;
+              id?: T;
+            };
         id?: T;
       };
   id?: T;
@@ -1728,32 +1745,6 @@ export interface ContentNetworkSelect<T extends boolean = true> {
   hexColor?: T;
   networkType?: T;
   order?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "works_select".
- */
-export interface WorksSelect<T extends boolean = true> {
-  tenant?: T;
-  name?: T;
-  description?: T;
-  projectLink?: T;
-  repoLink?: T;
-  directory?: T;
-  beta?: T;
-  iconImage?: T;
-  images?:
-    | T
-    | {
-        image?: T;
-        id?: T;
-      };
-  publishedAt?: T;
-  generateSlug?: T;
-  slug?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -2282,10 +2273,6 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'content-network';
           value: number | ContentNetwork;
-        } | null)
-      | ({
-          relationTo: 'works';
-          value: number | Work;
         } | null);
     global?: string | null;
     user?: (number | null) | User;
