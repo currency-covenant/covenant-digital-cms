@@ -1485,6 +1485,10 @@ export interface Header {
    */
   title: string;
   /**
+   * Optional logo image for the navbar.
+   */
+  logo?: (number | null) | Media;
+  /**
    * Navigation links shown in the site header. Items with sub-items appear as dropdowns.
    */
   navLinks?:
@@ -2432,6 +2436,7 @@ export interface AuditLogsSelect<T extends boolean = true> {
 export interface HeaderSelect<T extends boolean = true> {
   tenant?: T;
   title?: T;
+  logo?: T;
   navLinks?:
     | T
     | {

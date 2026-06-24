@@ -76,7 +76,6 @@ export default buildConfig({
   plugins: [
     ecommercePluginConfig,
     s3Storage({
-      acl: 'public-read',
       bucket: process.env.S3_BUCKET!,
       config: {
         region: process.env.S3_REGION!,

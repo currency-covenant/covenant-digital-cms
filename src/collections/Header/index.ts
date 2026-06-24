@@ -50,6 +50,15 @@ export const Header: CollectionConfig = {
         description: 'Internal label for this header config (e.g. "Main Nav").',
       },
     },
+    {
+      name: 'logo',
+      type: 'upload',
+      relationTo: 'media',
+      required: false,
+      admin: {
+        description: 'Optional logo image for the navbar.',
+      },
+    },
     navLinks({
       overrides: {
         admin: {
