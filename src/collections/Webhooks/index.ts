@@ -87,6 +87,7 @@ export const Webhooks: CollectionConfig = {
         { label: 'Orders', value: 'orders' },
         { label: 'Carts', value: 'carts' },
         { label: 'Transactions', value: 'transactions' },
+        { label: 'Header', value: 'header' },
       ],
     },
     {

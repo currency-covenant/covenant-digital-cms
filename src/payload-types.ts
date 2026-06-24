@@ -87,6 +87,7 @@ export interface Config {
     'api-keys': ApiKey;
     webhooks: Webhook;
     'audit-logs': AuditLog;
+    header: Header;
     addresses: Address;
     variants: Variant;
     variantTypes: VariantType;
@@ -138,6 +139,7 @@ export interface Config {
     'api-keys': ApiKeysSelect<false> | ApiKeysSelect<true>;
     webhooks: WebhooksSelect<false> | WebhooksSelect<true>;
     'audit-logs': AuditLogsSelect<false> | AuditLogsSelect<true>;
+    header: HeaderSelect<false> | HeaderSelect<true>;
     addresses: AddressesSelect<false> | AddressesSelect<true>;
     variants: VariantsSelect<false> | VariantsSelect<true>;
     variantTypes: VariantTypesSelect<false> | VariantTypesSelect<true>;
@@ -331,6 +333,7 @@ export interface Tenant {
         | 'variants'
         | 'variantTypes'
         | 'variantOptions'
+        | 'header'
       )[]
     | null;
   updatedAt: string;
@@ -1428,7 +1431,17 @@ export interface Webhook {
   url: string;
   secret: string;
   events: ('onCreate' | 'onUpdate' | 'onDelete' | 'onPublish')[];
-  collections: ('pages' | 'posts' | 'media' | 'categories' | 'products' | 'orders' | 'carts' | 'transactions')[];
+  collections: (
+    | 'pages'
+    | 'posts'
+    | 'media'
+    | 'categories'
+    | 'products'
+    | 'orders'
+    | 'carts'
+    | 'transactions'
+    | 'header'
+  )[];
   tenant: number | Tenant;
   enabled?: boolean | null;
   updatedAt: string;
@@ -1457,6 +1470,43 @@ export interface AuditLog {
   user?: (number | null) | User;
   tenant?: (number | null) | Tenant;
   timestamp: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "header".
+ */
+export interface Header {
+  id: number;
+  tenant?: (number | null) | Tenant;
+  /**
+   * Internal label for this header config (e.g. "Main Nav").
+   */
+  title: string;
+  /**
+   * Navigation links shown in the site header.
+   */
+  navLinks?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: number | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: number | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+        };
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1709,6 +1759,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'audit-logs';
         value: number | AuditLog;
+      } | null)
+    | ({
+        relationTo: 'header';
+        value: number | Header;
       } | null)
     | ({
         relationTo: 'addresses';
@@ -2348,6 +2402,30 @@ export interface AuditLogsSelect<T extends boolean = true> {
   user?: T;
   tenant?: T;
   timestamp?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "header_select".
+ */
+export interface HeaderSelect<T extends boolean = true> {
+  tenant?: T;
+  title?: T;
+  navLinks?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+            };
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }

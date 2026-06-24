@@ -78,8 +78,9 @@ export const Tenants: CollectionConfig = {
         { label: 'Variants', value: 'variants' },
         { label: 'Variant Types', value: 'variantTypes' },
         { label: 'Variant Options', value: 'variantOptions' },
+        { label: 'Header', value: 'header' },
       ],
-      defaultValue: ['pages', 'posts', 'products', 'works', 'shelf-items', 'shelf-categories', 'authors', 'links-profile', 'profile-links', 'content-network', 'media', 'categories', 'orders', 'carts', 'transactions', 'addresses', 'variants', 'variantTypes', 'variantOptions'],
+      defaultValue: ['pages', 'posts', 'products', 'works', 'shelf-items', 'shelf-categories', 'authors', 'links-profile', 'profile-links', 'content-network', 'media', 'categories', 'orders', 'carts', 'transactions', 'addresses', 'variants', 'variantTypes', 'variantOptions', 'header'],
       admin: {
         position: 'sidebar',
         description: 'Which collections this tenant can access in the admin panel.',
