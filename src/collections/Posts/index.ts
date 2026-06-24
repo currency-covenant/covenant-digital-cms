@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import {
   BlocksFeature,
+  CodeBlock,
   FixedToolbarFeature,
   HeadingFeature,
   HorizontalRuleFeature,
@@ -90,11 +91,14 @@ export const Posts: CollectionConfig<'posts'> = {
               editor: lexicalEditor({
                 features: ({ rootFeatures }) => {
                   return [
-                    ...rootFeatures,
-                    HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
-                    FixedToolbarFeature(),
-                    InlineToolbarFeature(),
-                    HorizontalRuleFeature(),
+            ...rootFeatures,
+            HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
+            FixedToolbarFeature(),
+            InlineToolbarFeature(),
+            HorizontalRuleFeature(),
+            BlocksFeature({
+              blocks: [CodeBlock()],
+            }),
                   ]
                 },
               }),
