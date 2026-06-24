@@ -1,5 +1,6 @@
 import { mongooseAdapter } from "@payloadcms/db-mongodb";
 import { postgresAdapter } from "@payloadcms/db-postgres";
+import { resendAdapter } from "@payloadcms/email-resend";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import path from "path";
 import { buildConfig, type Plugin } from "payload";
@@ -27,6 +28,7 @@ import { hasTenantPermission } from "./access/hasTenantPermission";
 import type { Config } from "./payload-types";
 import { getUserTenantIDs } from "./utilities/getUserTenantIDs";
 import { plugins } from "./plugins";
+import { ecommercePluginConfig } from "./plugins/ecommerce";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -47,8 +49,14 @@ export default buildConfig({
     pool: {
       connectionString: process.env.POSTGRES_URL,
     },
+    push: true,
   }),
   editor: lexicalEditor({}),
+  email: resendAdapter({
+    defaultFromAddress: process.env.RESEND_FROM_ADDRESS || "noreply@covenant.digital",
+    defaultFromName: process.env.RESEND_FROM_NAME || "Covenant Digital",
+    apiKey: process.env.RESEND_API_KEY || "",
+  }),
   graphQL: {
     schemaOutputFile: path.resolve(dirname, "generated-schema.graphql"),
   },
@@ -65,6 +73,7 @@ export default buildConfig({
     ...(process.env.ALLOWED_ORIGINS?.split(',') || []),
   ],
   plugins: [
+    ecommercePluginConfig,
     s3Storage({
       acl: 'public-read',
       bucket: process.env.S3_BUCKET!,
@@ -126,6 +135,38 @@ export default buildConfig({
         categories: {
           accessResultOverride: ({ accessResult, req }: { accessResult: any; req: any }) =>
             hasTenantPermission({ req, collectionSlug: 'categories', accessResult }),
+        },
+        products: {
+          accessResultOverride: ({ accessResult, req }: { accessResult: any; req: any }) =>
+            hasTenantPermission({ req, collectionSlug: 'products', accessResult }),
+        },
+        variants: {
+          accessResultOverride: ({ accessResult, req }: { accessResult: any; req: any }) =>
+            hasTenantPermission({ req, collectionSlug: 'variants', accessResult }),
+        },
+        variantTypes: {
+          accessResultOverride: ({ accessResult, req }: { accessResult: any; req: any }) =>
+            hasTenantPermission({ req, collectionSlug: 'variantTypes', accessResult }),
+        },
+        variantOptions: {
+          accessResultOverride: ({ accessResult, req }: { accessResult: any; req: any }) =>
+            hasTenantPermission({ req, collectionSlug: 'variantOptions', accessResult }),
+        },
+        orders: {
+          accessResultOverride: ({ accessResult, req }: { accessResult: any; req: any }) =>
+            hasTenantPermission({ req, collectionSlug: 'orders', accessResult }),
+        },
+        carts: {
+          accessResultOverride: ({ accessResult, req }: { accessResult: any; req: any }) =>
+            hasTenantPermission({ req, collectionSlug: 'carts', accessResult }),
+        },
+        transactions: {
+          accessResultOverride: ({ accessResult, req }: { accessResult: any; req: any }) =>
+            hasTenantPermission({ req, collectionSlug: 'transactions', accessResult }),
+        },
+        addresses: {
+          accessResultOverride: ({ accessResult, req }: { accessResult: any; req: any }) =>
+            hasTenantPermission({ req, collectionSlug: 'addresses', accessResult }),
         },
       },
       tenantField: {

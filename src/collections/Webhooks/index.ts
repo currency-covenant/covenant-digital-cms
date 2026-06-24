@@ -83,6 +83,10 @@ export const Webhooks: CollectionConfig = {
         { label: 'Posts', value: 'posts' },
         { label: 'Media', value: 'media' },
         { label: 'Categories', value: 'categories' },
+        { label: 'Products', value: 'products' },
+        { label: 'Orders', value: 'orders' },
+        { label: 'Carts', value: 'carts' },
+        { label: 'Transactions', value: 'transactions' },
       ],
     },
     {

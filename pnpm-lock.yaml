@@ -14,9 +14,15 @@ importers:
       '@payloadcms/db-postgres':
         specifier: 3.85.0
         version: 3.85.0(payload@3.85.0(graphql@16.14.0)(typescript@5.5.2))
+      '@payloadcms/email-resend':
+        specifier: 3.85.0
+        version: 3.85.0(payload@3.85.0(graphql@16.14.0)(typescript@5.5.2))
       '@payloadcms/next':
         specifier: 3.85.0
         version: 3.85.0(@types/react@19.2.9)(graphql@16.14.0)(monaco-editor@0.52.2)(next@15.4.11(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.77.4))(payload@3.85.0(graphql@16.14.0)(typescript@5.5.2))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@5.5.2)
+      '@payloadcms/plugin-ecommerce':
+        specifier: 3.85.0
+        version: 3.85.0(@types/react@19.2.9)(monaco-editor@0.52.2)(next@15.4.11(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.77.4))(payload@3.85.0(graphql@16.14.0)(typescript@5.5.2))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@5.5.2)
       '@payloadcms/plugin-form-builder':
         specifier: ^3.85.0
         version: 3.85.0(@types/react@19.2.9)(monaco-editor@0.52.2)(next@15.4.11(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.77.4))(payload@3.85.0(graphql@16.14.0)(typescript@5.5.2))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@5.5.2)
@@ -74,6 +80,9 @@ importers:
       sharp:
         specifier: 0.32.6
         version: 0.32.6
+      stripe:
+        specifier: ^18.5.0
+        version: 18.5.0(@types/node@25.9.3)
       tailwind-merge:
         specifier: ^3.6.0
         version: 3.6.0
@@ -85,8 +94,8 @@ importers:
         specifier: ^3.28.0
         version: 3.28.0(@typescript-eslint/eslint-plugin@8.60.0(@typescript-eslint/parser@8.60.0(eslint@8.57.1)(typescript@5.5.2))(eslint@8.57.1)(typescript@5.5.2))(jiti@2.7.0)(ts-api-utils@2.5.0(typescript@5.5.2))
       '@payloadcms/graphql':
-        specifier: latest
-        version: 3.85.1(graphql@16.14.0)(payload@3.85.0(graphql@16.14.0)(typescript@5.5.2))(typescript@5.5.2)
+        specifier: 3.85.0
+        version: 3.85.0(graphql@16.14.0)(payload@3.85.0(graphql@16.14.0)(typescript@5.5.2))(typescript@5.5.2)
       '@swc/core':
         specifier: ^1.15.40
         version: 1.15.40
@@ -1506,6 +1515,12 @@ packages:
     peerDependencies:
       payload: 3.85.0
 
+  '@payloadcms/email-resend@3.85.0':
+    resolution: {integrity: sha512-5UIFKJjMD+XthWWVhlGCiqVVWSXzEQE3NbkqhnfVeJNNt+JvUthfTp/EOOpb4uDa/svkYQdKamuntHcwtYn1+w==}
+    engines: {node: ^18.20.2 || >=20.9.0}
+    peerDependencies:
+      payload: 3.85.0
+
   '@payloadcms/eslint-config@3.28.0':
     resolution: {integrity: sha512-BiGtowdT4uLdGaM1yxP3oZRZrRMi27FiIU2eJuRqiGqdCVfKYRtlNAHq5knf2ExmdV/U3yZivH4linR2DNT2eA==}
 
@@ -1519,13 +1534,6 @@ packages:
       graphql: ^16.8.1
       payload: 3.85.0
 
-  '@payloadcms/graphql@3.85.1':
-    resolution: {integrity: sha512-jMrSCiGYmsjOUGmZayX5U7Vh3i8IcO0XMmQ9x5jCIZuB+/sNDiBNeHJWArC+H2cfPYh0G+iv9t+RpPg6FemiMg==}
-    hasBin: true
-    peerDependencies:
-      graphql: ^16.8.1
-      payload: 3.85.1
-
   '@payloadcms/next@3.85.0':
     resolution: {integrity: sha512-9Q0kaKgd1CBl2Nu6QMISqRKfDlGraCkLWxKlWH59MO0Fu+vhvqhqEIv/gjzNj6wWMMH8e4yzFm8knZjTJTzzWQ==}
     engines: {node: ^18.20.2 || >=20.9.0}
@@ -1536,6 +1544,13 @@ packages:
 
   '@payloadcms/plugin-cloud-storage@3.85.0':
     resolution: {integrity: sha512-kEzm741hvvPm068DM/GMWY4NPB2399sWHvICzH/F/UFVNZbrxHqBSVpaX/lEdyo7VRqa/i6w21SGgTe2EAke8g==}
+    peerDependencies:
+      payload: 3.85.0
+      react: ^19.0.1 || ^19.1.2 || ^19.2.1
+      react-dom: ^19.0.1 || ^19.1.2 || ^19.2.1
+
+  '@payloadcms/plugin-ecommerce@3.85.0':
+    resolution: {integrity: sha512-Q+y83vvqCwNyMcS9ogOadX8tvCtNM5tlQW7FoQLTjYmLYzpS3727gzYjwkb597eM3dzS2kbUlwW2JTMy70T8jA==}
     peerDependencies:
       payload: 3.85.0
       react: ^19.0.1 || ^19.1.2 || ^19.2.1
@@ -4167,6 +4182,10 @@ packages:
     resolution: {integrity: sha512-eZ7l+0ZVy3He9c85pEM9KEBR9DFA4jrmWvIjm9wpcHvScwc/vgZDl2TNOF0pm0JsWKw24XBUZOY0Wxn7/nvJnw==}
     engines: {node: '>=18'}
 
+  qs@6.15.2:
+    resolution: {integrity: sha512-Rzq0KEyX/w/tEybncDgdkZrJgVUsUMk3xjh3t5bv3S1HTAtg+uOYt72+ZfwiQwKdysThkTBdL/rTi6HDmX9Ddw==}
+    engines: {node: '>=0.6'}
+
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
 
@@ -4512,6 +4531,15 @@ packages:
     resolution: {integrity: sha512-1tB5mhVo7U+ETBKNf92xT4hrQa3pm0MZ0PQvuDnWgAAGHDsfp4lPSpiS6psrSiet87wyGPh9ft6wmhOMQ0hDiw==}
     engines: {node: '>=14.16'}
 
+  stripe@18.5.0:
+    resolution: {integrity: sha512-Hp+wFiEQtCB0LlNgcFh5uVyKznpDjzyUZ+CNVEf+I3fhlYvh7rZruIg+jOwzJRCpy0ZTPMjlzm7J2/M2N6d+DA==}
+    engines: {node: '>=12.*'}
+    peerDependencies:
+      '@types/node': '>=12.x.x'
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+
   strnum@2.3.0:
     resolution: {integrity: sha512-ums3KNd42PGyx5xaoVTO1mjU1bH3NpY4vsrVlnv9PNGqQj8wd7rJ6nEypLrJ7z5vxK5RP0yMLo6J/Gsm62DI5Q==}
 
@@ -4639,11 +4667,6 @@ packages:
 
   tsx@4.22.3:
     resolution: {integrity: sha512-mdoNxBC/cSQObGGVQ5Bpn5i+yv7j68gk3Nfm3wFjcJg3Z0Mix9jzAFfP12prmm5eVGmDKtp0yyArrs0Q+8gZHg==}
-    engines: {node: '>=18.0.0'}
-    hasBin: true
-
-  tsx@4.22.4:
-    resolution: {integrity: sha512-X8EX+XV4QR5xCsrgxaED954zTDfY8KqlDtskKEL0cHhyS/P8b4IFOvGDQpsC9Q1XnLq915wEfwwY/zzskCtmhg==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -6300,6 +6323,10 @@ snapshots:
       - sql.js
       - sqlite3
 
+  '@payloadcms/email-resend@3.85.0(payload@3.85.0(graphql@16.14.0)(typescript@5.5.2))':
+    dependencies:
+      payload: 3.85.0(graphql@16.14.0)(typescript@5.5.2)
+
   '@payloadcms/eslint-config@3.28.0(@typescript-eslint/eslint-plugin@8.60.0(@typescript-eslint/parser@8.60.0(eslint@8.57.1)(typescript@5.5.2))(eslint@8.57.1)(typescript@5.5.2))(jiti@2.7.0)(ts-api-utils@2.5.0(typescript@5.5.2))':
     dependencies:
       '@eslint-react/eslint-plugin': 1.31.0(eslint@9.22.0(jiti@2.7.0))(ts-api-utils@2.5.0(typescript@5.5.2))(typescript@5.7.3)
@@ -6372,17 +6399,6 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  '@payloadcms/graphql@3.85.1(graphql@16.14.0)(payload@3.85.0(graphql@16.14.0)(typescript@5.5.2))(typescript@5.5.2)':
-    dependencies:
-      graphql: 16.14.0
-      graphql-scalars: 1.22.2(graphql@16.14.0)
-      payload: 3.85.0(graphql@16.14.0)(typescript@5.5.2)
-      pluralize: 8.0.0
-      ts-essentials: 10.0.3(typescript@5.5.2)
-      tsx: 4.22.4
-    transitivePeerDependencies:
-      - typescript
-
   '@payloadcms/next@3.85.0(@types/react@19.2.9)(graphql@16.14.0)(monaco-editor@0.52.2)(next@15.4.11(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.77.4))(payload@3.85.0(graphql@16.14.0)(typescript@5.5.2))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@5.5.2)':
     dependencies:
       '@dnd-kit/core': 6.3.1(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -6418,6 +6434,21 @@ snapshots:
       find-node-modules: 2.1.3
       payload: 3.85.0(graphql@16.14.0)(typescript@5.5.2)
       range-parser: 1.2.1
+      react: 19.2.6
+      react-dom: 19.2.6(react@19.2.6)
+    transitivePeerDependencies:
+      - '@types/react'
+      - monaco-editor
+      - next
+      - supports-color
+      - typescript
+
+  '@payloadcms/plugin-ecommerce@3.85.0(@types/react@19.2.9)(monaco-editor@0.52.2)(next@15.4.11(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.77.4))(payload@3.85.0(graphql@16.14.0)(typescript@5.5.2))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@5.5.2)':
+    dependencies:
+      '@payloadcms/translations': 3.85.0
+      '@payloadcms/ui': 3.85.0(@types/react@19.2.9)(monaco-editor@0.52.2)(next@15.4.11(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(sass@1.77.4))(payload@3.85.0(graphql@16.14.0)(typescript@5.5.2))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@5.5.2)
+      payload: 3.85.0(graphql@16.14.0)(typescript@5.5.2)
+      qs-esm: 8.0.1
       react: 19.2.6
       react-dom: 19.2.6(react@19.2.6)
     transitivePeerDependencies:
@@ -9610,6 +9641,10 @@ snapshots:
 
   qs-esm@8.0.1: {}
 
+  qs@6.15.2:
+    dependencies:
+      side-channel: 1.1.0
+
   queue-microtask@1.2.3: {}
 
   quick-format-unescaped@4.0.4: {}
@@ -10055,6 +10090,12 @@ snapshots:
 
   strip-json-comments@5.0.3: {}
 
+  stripe@18.5.0(@types/node@25.9.3):
+    dependencies:
+      qs: 6.15.2
+    optionalDependencies:
+      '@types/node': 25.9.3
+
   strnum@2.3.0: {}
 
   strtok3@10.3.5:
@@ -10203,12 +10244,6 @@ snapshots:
       fsevents: 2.3.3
 
   tsx@4.22.3:
-    dependencies:
-      esbuild: 0.28.0
-    optionalDependencies:
-      fsevents: 2.3.3
-
-  tsx@4.22.4:
     dependencies:
       esbuild: 0.28.0
     optionalDependencies:

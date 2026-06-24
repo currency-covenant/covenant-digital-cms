@@ -88,7 +88,7 @@ const Users: CollectionConfig = {
       type: 'select',
       defaultValue: ['user'],
       hasMany: true,
-      options: ['super-admin', 'user'],
+      options: ['super-admin', 'user', 'customer'],
       saveToJWT: true,
       access: {
         update: ({ req }) => {
@@ -103,6 +103,46 @@ const Users: CollectionConfig = {
         beforeValidate: [ensureUniqueUsername],
       },
       index: true,
+    },
+    {
+      name: 'betterAuthId',
+      type: 'text',
+      index: true,
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        description: 'External Better Auth user ID (for the storefront).',
+      },
+    },
+    {
+      name: 'orders',
+      type: 'join',
+      collection: 'orders',
+      on: 'customer',
+      admin: {
+        allowCreate: false,
+        defaultColumns: ['id', 'createdAt', 'total', 'currency', 'items'],
+      },
+    },
+    {
+      name: 'cart',
+      type: 'join',
+      collection: 'carts',
+      on: 'customer',
+      admin: {
+        allowCreate: false,
+        defaultColumns: ['id', 'createdAt', 'total', 'currency', 'items'],
+      },
+    },
+    {
+      name: 'addresses',
+      type: 'join',
+      collection: 'addresses',
+      on: 'customer',
+      admin: {
+        allowCreate: false,
+        defaultColumns: ['id'],
+      },
     },
     {
       ...defaultTenantArrayField,
