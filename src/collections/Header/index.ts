@@ -5,7 +5,7 @@ import { getUserTenantIDsByRoles } from '@/access/hasRole'
 import { setTenantFromUser } from '@/hooks/setTenantFromUser'
 import { triggerWebhookAfterChange, triggerWebhookAfterDelete } from '@/hooks/triggerWebhooks'
 import { logAuditAfterChange, logAuditAfterDelete } from '@/hooks/logAuditEvent'
-import { linkGroup } from '@/fields/linkGroup'
+import { navLinks } from '@/fields/navLinks'
 
 export const Header: CollectionConfig = {
   slug: 'header',
@@ -50,13 +50,11 @@ export const Header: CollectionConfig = {
         description: 'Internal label for this header config (e.g. "Main Nav").',
       },
     },
-    linkGroup({
-      appearances: false,
+    navLinks({
       overrides: {
-        name: 'navLinks',
         admin: {
           initCollapsed: false,
-          description: 'Navigation links shown in the site header.',
+          description: 'Navigation links shown in the site header. Items with sub-items appear as dropdowns.',
         },
       },
     }),
