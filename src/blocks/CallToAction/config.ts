@@ -36,6 +36,12 @@ export const CallToAction: Block = {
         maxRows: 2,
       },
     }),
+    {
+      name: 'backgroundImage',
+      type: 'upload',
+      relationTo: 'media',
+      required: false,
+    },
   ],
   labels: {
     plural: 'Calls to Action',

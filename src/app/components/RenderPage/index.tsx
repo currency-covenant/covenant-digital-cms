@@ -5,6 +5,8 @@ import React from 'react'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { RenderHero } from '@/heros/RenderHero'
 
+export { generatePageMetadata, type PageMetadata } from './Metadata'
+
 export const RenderPage = ({ data }: { data: Page }) => {
   return (
     <>

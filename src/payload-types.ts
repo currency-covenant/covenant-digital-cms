@@ -769,6 +769,7 @@ export interface CallToActionBlock {
         id?: string | null;
       }[]
     | null;
+  backgroundImage?: (number | null) | Media;
   id?: string | null;
   blockName?: string | null;
   blockType: 'cta';
@@ -1957,6 +1958,7 @@ export interface CallToActionBlockSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  backgroundImage?: T;
   id?: T;
   blockName?: T;
 }
