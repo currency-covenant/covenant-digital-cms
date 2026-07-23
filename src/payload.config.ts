@@ -62,15 +62,18 @@ export default buildConfig({
     schemaOutputFile: path.resolve(dirname, "generated-schema.graphql"),
   },
   secret: process.env.PAYLOAD_SECRET as string,
+  serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL,
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),
   },
   cors: [
-    process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000',
+    'http://localhost:3000',
+    ...(process.env.PAYLOAD_PUBLIC_SERVER_URL ? [process.env.PAYLOAD_PUBLIC_SERVER_URL] : []),
     ...(process.env.ALLOWED_ORIGINS?.split(',') || []),
   ],
   csrf: [
-    process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000',
+    'http://localhost:3000',
+    ...(process.env.PAYLOAD_PUBLIC_SERVER_URL ? [process.env.PAYLOAD_PUBLIC_SERVER_URL] : []),
     ...(process.env.ALLOWED_ORIGINS?.split(',') || []),
   ],
   plugins: [

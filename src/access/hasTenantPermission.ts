@@ -45,6 +45,7 @@ export const hasTenantPermission = async ({
         id: tenantId,
         depth: 0,
         select: { permissions: true },
+        req,
       })
       req.context.tenantPermissions[tenantId] = (tenant?.permissions as string[]) || []
     }
