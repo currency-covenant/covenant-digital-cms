@@ -49,6 +49,10 @@ export const link: LinkType = ({ appearances, disableLabel = false, overrides = 
                 label: 'Custom URL',
                 value: 'custom',
               },
+              {
+                label: 'Scroll to section',
+                value: 'scroll',
+              },
             ],
           },
           {
@@ -59,6 +63,8 @@ export const link: LinkType = ({ appearances, disableLabel = false, overrides = 
                 alignSelf: 'flex-end',
               },
               width: '50%',
+              condition: (_, siblingData) =>
+                siblingData?.type === 'reference' || siblingData?.type === 'custom',
             },
             label: 'Open in new tab',
           },
@@ -85,6 +91,15 @@ export const link: LinkType = ({ appearances, disableLabel = false, overrides = 
         condition: (_, siblingData) => siblingData?.type === 'custom',
       },
       label: 'Custom URL',
+      required: true,
+    },
+    {
+      name: 'sectionId',
+      type: 'text',
+      admin: {
+        condition: (_, siblingData) => siblingData?.type === 'scroll',
+      },
+      label: 'Section ID',
       required: true,
     },
   ]

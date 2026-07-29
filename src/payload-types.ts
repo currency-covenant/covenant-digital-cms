@@ -243,7 +243,7 @@ export interface Page {
     links?:
       | {
           link: {
-            type?: ('reference' | 'custom') | null;
+            type?: ('reference' | 'custom' | 'scroll') | null;
             newTab?: boolean | null;
             reference?:
               | ({
@@ -255,6 +255,7 @@ export interface Page {
                   value: number | Post;
                 } | null);
             url?: string | null;
+            sectionId?: string | null;
             label: string;
             /**
              * Choose how the link should be rendered.
@@ -275,6 +276,7 @@ export interface Page {
     | ProfileBlock
     | ProductGridBlock
     | WorkGridBlock
+    | CTAButtonBlock
   )[];
   meta?: {
     title?: string | null;
@@ -748,7 +750,7 @@ export interface CallToActionBlock {
   links?:
     | {
         link: {
-          type?: ('reference' | 'custom') | null;
+          type?: ('reference' | 'custom' | 'scroll') | null;
           newTab?: boolean | null;
           reference?:
             | ({
@@ -760,6 +762,7 @@ export interface CallToActionBlock {
                 value: number | Post;
               } | null);
           url?: string | null;
+          sectionId?: string | null;
           label: string;
           /**
            * Choose how the link should be rendered.
@@ -799,7 +802,7 @@ export interface ContentBlock {
         } | null;
         enableLink?: boolean | null;
         link?: {
-          type?: ('reference' | 'custom') | null;
+          type?: ('reference' | 'custom' | 'scroll') | null;
           newTab?: boolean | null;
           reference?:
             | ({
@@ -811,6 +814,7 @@ export interface ContentBlock {
                 value: number | Post;
               } | null);
           url?: string | null;
+          sectionId?: string | null;
           label: string;
           /**
            * Choose how the link should be rendered.
@@ -1278,6 +1282,36 @@ export interface WorkGridBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CTAButtonBlock".
+ */
+export interface CTAButtonBlock {
+  title: string;
+  link: {
+    type?: ('reference' | 'custom' | 'scroll') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null);
+    url?: string | null;
+    sectionId?: string | null;
+    label: string;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: ('default' | 'outline') | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'ctaButton';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "shelf-items".
  */
 export interface ShelfItem {
@@ -1495,7 +1529,7 @@ export interface Header {
   navLinks?:
     | {
         link: {
-          type?: ('reference' | 'custom') | null;
+          type?: ('reference' | 'custom' | 'scroll') | null;
           newTab?: boolean | null;
           reference?:
             | ({
@@ -1507,12 +1541,13 @@ export interface Header {
                 value: number | Post;
               } | null);
           url?: string | null;
+          sectionId?: string | null;
           label: string;
         };
         children?:
           | {
               link: {
-                type?: ('reference' | 'custom') | null;
+                type?: ('reference' | 'custom' | 'scroll') | null;
                 newTab?: boolean | null;
                 reference?:
                   | ({
@@ -1524,6 +1559,7 @@ export interface Header {
                       value: number | Post;
                     } | null);
                 url?: string | null;
+                sectionId?: string | null;
                 label: string;
               };
               id?: string | null;
@@ -1905,6 +1941,7 @@ export interface PagesSelect<T extends boolean = true> {
                     newTab?: T;
                     reference?: T;
                     url?: T;
+                    sectionId?: T;
                     label?: T;
                     appearance?: T;
                   };
@@ -1923,6 +1960,7 @@ export interface PagesSelect<T extends boolean = true> {
         profile?: T | ProfileBlockSelect<T>;
         productGrid?: T | ProductGridBlockSelect<T>;
         workGrid?: T | WorkGridBlockSelect<T>;
+        ctaButton?: T | CTAButtonBlockSelect<T>;
       };
   meta?:
     | T
@@ -1953,6 +1991,7 @@ export interface CallToActionBlockSelect<T extends boolean = true> {
               newTab?: T;
               reference?: T;
               url?: T;
+              sectionId?: T;
               label?: T;
               appearance?: T;
             };
@@ -1980,6 +2019,7 @@ export interface ContentBlockSelect<T extends boolean = true> {
               newTab?: T;
               reference?: T;
               url?: T;
+              sectionId?: T;
               label?: T;
               appearance?: T;
             };
@@ -2079,6 +2119,26 @@ export interface WorkGridBlockSelect<T extends boolean = true> {
               id?: T;
             };
         id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CTAButtonBlock_select".
+ */
+export interface CTAButtonBlockSelect<T extends boolean = true> {
+  title?: T;
+  link?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        sectionId?: T;
+        label?: T;
+        appearance?: T;
       };
   id?: T;
   blockName?: T;
@@ -2449,6 +2509,7 @@ export interface HeaderSelect<T extends boolean = true> {
               newTab?: T;
               reference?: T;
               url?: T;
+              sectionId?: T;
               label?: T;
             };
         children?:
@@ -2461,6 +2522,7 @@ export interface HeaderSelect<T extends boolean = true> {
                     newTab?: T;
                     reference?: T;
                     url?: T;
+                    sectionId?: T;
                     label?: T;
                   };
               id?: T;

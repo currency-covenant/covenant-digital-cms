@@ -12,6 +12,7 @@ import { FormBlock } from '../../blocks/Form/config'
 import { Profile } from '../../blocks/Profile/config'
 import { ProductGrid } from '../../blocks/ProductGrid/config'
 import { WorkGrid } from '../../blocks/WorkGrid/config'
+import { CTAButton } from '../../blocks/CTAButton/config'
 import { hero } from '../../heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -82,7 +83,7 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, Profile, ProductGrid, WorkGrid],
+              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, Profile, ProductGrid, WorkGrid, CTAButton],
               required: true,
               admin: {
                 initCollapsed: true,
