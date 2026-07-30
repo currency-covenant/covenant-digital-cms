@@ -277,6 +277,7 @@ export interface Page {
     | ProductGridBlock
     | WorkGridBlock
     | CTAButtonBlock
+    | MarqueeBlock
   )[];
   meta?: {
     title?: string | null;
@@ -1312,6 +1313,27 @@ export interface CTAButtonBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MarqueeBlock".
+ */
+export interface MarqueeBlock {
+  items: {
+    title: string;
+    /**
+     * Enter a simple-icons slug (lowercase, no spaces). Find icons at https://simpleicons.org
+     */
+    icon?: string | null;
+    /**
+     * Upload a custom icon image (PNG, SVG, etc.). If provided, this takes precedence over the simple-icons slug.
+     */
+    uploadIcon?: (number | null) | Media;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'marquee';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "shelf-items".
  */
 export interface ShelfItem {
@@ -1961,6 +1983,7 @@ export interface PagesSelect<T extends boolean = true> {
         productGrid?: T | ProductGridBlockSelect<T>;
         workGrid?: T | WorkGridBlockSelect<T>;
         ctaButton?: T | CTAButtonBlockSelect<T>;
+        marquee?: T | MarqueeBlockSelect<T>;
       };
   meta?:
     | T
@@ -2139,6 +2162,22 @@ export interface CTAButtonBlockSelect<T extends boolean = true> {
         sectionId?: T;
         label?: T;
         appearance?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MarqueeBlock_select".
+ */
+export interface MarqueeBlockSelect<T extends boolean = true> {
+  items?:
+    | T
+    | {
+        title?: T;
+        icon?: T;
+        uploadIcon?: T;
+        id?: T;
       };
   id?: T;
   blockName?: T;

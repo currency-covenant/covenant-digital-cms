@@ -3,9 +3,11 @@ import type { Page } from '@payload-types'
 import React from 'react'
 
 import { ProfileBlock } from '@/blocks/Profile/Component'
+import { MarqueeBlock } from '@/blocks/Marquee/Component'
 
 const blockComponents: Record<string, React.ComponentType<any>> = {
   profile: ProfileBlock,
+  marquee: MarqueeBlock,
 }
 
 type Block = NonNullable<NonNullable<Page['layout']>[number]>

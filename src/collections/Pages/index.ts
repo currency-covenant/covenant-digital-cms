@@ -13,6 +13,7 @@ import { Profile } from '../../blocks/Profile/config'
 import { ProductGrid } from '../../blocks/ProductGrid/config'
 import { WorkGrid } from '../../blocks/WorkGrid/config'
 import { CTAButton } from '../../blocks/CTAButton/config'
+import { Marquee } from '../../blocks/Marquee/config'
 import { hero } from '../../heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -83,7 +84,7 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, Profile, ProductGrid, WorkGrid, CTAButton],
+              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, Profile, ProductGrid, WorkGrid, CTAButton, Marquee],
               required: true,
               admin: {
                 initCollapsed: true,
