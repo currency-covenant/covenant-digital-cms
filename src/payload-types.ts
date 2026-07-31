@@ -280,6 +280,7 @@ export interface Page {
     | WorkGridBlock
     | CTAButtonBlock
     | MarqueeBlock
+    | LinkListBlock
   )[];
   meta?: {
     title?: string | null;
@@ -1336,6 +1337,41 @@ export interface MarqueeBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LinkListBlock".
+ */
+export interface LinkListBlock {
+  title: string;
+  links: {
+    title: string;
+    description: string;
+    link: {
+      type?: ('reference' | 'custom' | 'scroll') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: number | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: number | Post;
+          } | null);
+      url?: string | null;
+      sectionId?: string | null;
+      label: string;
+      /**
+       * Choose how the link should be rendered.
+       */
+      appearance?: ('default' | 'outline') | null;
+    };
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'linkList';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "shelf-items".
  */
 export interface ShelfItem {
@@ -2081,6 +2117,7 @@ export interface PagesSelect<T extends boolean = true> {
         workGrid?: T | WorkGridBlockSelect<T>;
         ctaButton?: T | CTAButtonBlockSelect<T>;
         marquee?: T | MarqueeBlockSelect<T>;
+        linkList?: T | LinkListBlockSelect<T>;
       };
   meta?:
     | T
@@ -2274,6 +2311,33 @@ export interface MarqueeBlockSelect<T extends boolean = true> {
         title?: T;
         icon?: T;
         uploadIcon?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LinkListBlock_select".
+ */
+export interface LinkListBlockSelect<T extends boolean = true> {
+  title?: T;
+  links?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              sectionId?: T;
+              label?: T;
+              appearance?: T;
+            };
         id?: T;
       };
   id?: T;
