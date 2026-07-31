@@ -1,14 +1,9 @@
 'use client'
 
+import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import type { MarqueeBlock as MarqueeBlockType } from '@payload-types'
 import * as SiIcons from 'react-icons/si'
-
-/* ------------------------------------------------------------------ */
-/*  Icon resolver — simple-icons via react-icons/si                   */
-/* ------------------------------------------------------------------ */
-
-import Image from 'next/image'
 
 const iconMap: Record<string, React.ComponentType<{ size?: number; title?: string }>> =
   SiIcons as unknown as Record<string, React.ComponentType<{ size?: number; title?: string }>>

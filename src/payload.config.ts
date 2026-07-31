@@ -22,6 +22,7 @@ import { APIKeys } from "./collections/APIKeys";
 import { Webhooks } from "./collections/Webhooks";
 import { AuditLogs } from "./collections/AuditLogs";
 import { Header } from "./collections/Header";
+import { Footer } from "./collections/Footer";
 import { multiTenantPlugin } from "@payloadcms/plugin-multi-tenant";
 import { s3Storage } from "@payloadcms/storage-s3";
 import { isSuperAdmin } from "./access/isSuperAdmin";
@@ -42,7 +43,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Pages, Posts, ShelfItems, ShelfCategories, Authors, LinksProfile, ProfileLinks, ContentNetwork, Media, Categories, Users, Tenants, APIKeys, Webhooks, AuditLogs, Header],
+  collections: [Pages, Posts, ShelfItems, ShelfCategories, Authors, LinksProfile, ProfileLinks, ContentNetwork, Media, Categories, Users, Tenants, APIKeys, Webhooks, AuditLogs, Header, Footer],
   // db: mongooseAdapter({
   //   url: process.env.DATABASE_URL as string,
   // }),
@@ -174,6 +175,10 @@ export default buildConfig({
         header: {
           accessResultOverride: ({ accessResult, req }: { accessResult: any; req: any }) =>
             hasTenantPermission({ req, collectionSlug: 'header', accessResult }),
+        },
+        footer: {
+          accessResultOverride: ({ accessResult, req }: { accessResult: any; req: any }) =>
+            hasTenantPermission({ req, collectionSlug: 'footer', accessResult }),
         },
       },
       tenantField: {

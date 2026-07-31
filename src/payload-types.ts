@@ -88,6 +88,7 @@ export interface Config {
     webhooks: Webhook;
     'audit-logs': AuditLog;
     header: Header;
+    footer: Footer;
     addresses: Address;
     variants: Variant;
     variantTypes: VariantType;
@@ -140,6 +141,7 @@ export interface Config {
     webhooks: WebhooksSelect<false> | WebhooksSelect<true>;
     'audit-logs': AuditLogsSelect<false> | AuditLogsSelect<true>;
     header: HeaderSelect<false> | HeaderSelect<true>;
+    footer: FooterSelect<false> | FooterSelect<true>;
     addresses: AddressesSelect<false> | AddressesSelect<true>;
     variants: VariantsSelect<false> | VariantsSelect<true>;
     variantTypes: VariantTypesSelect<false> | VariantTypesSelect<true>;
@@ -1595,6 +1597,97 @@ export interface Header {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer".
+ */
+export interface Footer {
+  id: number;
+  tenant?: (number | null) | Tenant;
+  /**
+   * Internal label for this footer config (e.g. "Main Footer").
+   */
+  title: string;
+  /**
+   * Optional logo image shown in the footer.
+   */
+  logo?: (number | null) | Media;
+  /**
+   * Short tagline shown under the logo.
+   */
+  description?: string | null;
+  /**
+   * Social media icons shown in the footer.
+   */
+  socialLinks?:
+    | {
+        platform: 'twitter' | 'facebook' | 'instagram' | 'linkedin' | 'youtube' | 'github';
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Footer link columns. Each column has a title and a list of links.
+   */
+  columns: {
+    title: string;
+    links?:
+      | {
+          link: {
+            type?: ('reference' | 'custom' | 'scroll') | null;
+            newTab?: boolean | null;
+            reference?:
+              | ({
+                  relationTo: 'pages';
+                  value: number | Page;
+                } | null)
+              | ({
+                  relationTo: 'posts';
+                  value: number | Post;
+                } | null);
+            url?: string | null;
+            sectionId?: string | null;
+            label: string;
+          };
+          id?: string | null;
+        }[]
+      | null;
+    id?: string | null;
+  }[];
+  newsletterHeading?: string | null;
+  newsletterPlaceholder?: string | null;
+  newsletterButtonLabel?: string | null;
+  /**
+   * e.g. © 2024 Covenant Digital. All rights reserved.
+   */
+  copyrightText?: string | null;
+  /**
+   * Links shown in the bottom-right of the footer (Terms, Privacy, etc.).
+   */
+  legalLinks?:
+    | {
+        link: {
+          type?: ('reference' | 'custom' | 'scroll') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: number | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: number | Post;
+              } | null);
+          url?: string | null;
+          sectionId?: string | null;
+          label: string;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1846,6 +1939,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'header';
         value: number | Header;
+      } | null)
+    | ({
+        relationTo: 'footer';
+        value: number | Footer;
       } | null)
     | ({
         relationTo: 'addresses';
@@ -2565,6 +2662,65 @@ export interface HeaderSelect<T extends boolean = true> {
                     label?: T;
                   };
               id?: T;
+            };
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer_select".
+ */
+export interface FooterSelect<T extends boolean = true> {
+  tenant?: T;
+  title?: T;
+  logo?: T;
+  description?: T;
+  socialLinks?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
+  columns?:
+    | T
+    | {
+        title?: T;
+        links?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    sectionId?: T;
+                    label?: T;
+                  };
+              id?: T;
+            };
+        id?: T;
+      };
+  newsletterHeading?: T;
+  newsletterPlaceholder?: T;
+  newsletterButtonLabel?: T;
+  copyrightText?: T;
+  legalLinks?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              sectionId?: T;
+              label?: T;
             };
         id?: T;
       };
