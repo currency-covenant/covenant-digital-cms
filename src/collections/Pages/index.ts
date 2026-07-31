@@ -15,6 +15,7 @@ import { WorkGrid } from '../../blocks/WorkGrid/config'
 import { CTAButton } from '../../blocks/CTAButton/config'
 import { Marquee } from '../../blocks/Marquee/config'
 import { LinkList } from '../../blocks/LinkList/config'
+import { TechStack } from '../../blocks/TechStack/config'
 import { hero } from '../../heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -85,7 +86,7 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, Profile, ProductGrid, WorkGrid, CTAButton, Marquee, LinkList],
+              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, Profile, ProductGrid, WorkGrid, CTAButton, Marquee, LinkList, TechStack],
               required: true,
               admin: {
                 initCollapsed: true,

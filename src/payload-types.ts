@@ -281,6 +281,7 @@ export interface Page {
     | CTAButtonBlock
     | MarqueeBlock
     | LinkListBlock
+    | TechStackBlock
   )[];
   meta?: {
     title?: string | null;
@@ -1372,6 +1373,34 @@ export interface LinkListBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TechStackBlock".
+ */
+export interface TechStackBlock {
+  title: string;
+  description?: string | null;
+  items: {
+    /**
+     * Which row this item appears in
+     */
+    row?: number | null;
+    title: string;
+    /**
+     * react-icons/si slug, e.g. "React" or "Nextdotjs"
+     */
+    icon?: string | null;
+    /**
+     * Devicon class, e.g. "devicon-react-original colored"
+     */
+    devicon?: string | null;
+    uploadIcon?: (number | null) | Media;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'techStack';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "shelf-items".
  */
 export interface ShelfItem {
@@ -2118,6 +2147,7 @@ export interface PagesSelect<T extends boolean = true> {
         ctaButton?: T | CTAButtonBlockSelect<T>;
         marquee?: T | MarqueeBlockSelect<T>;
         linkList?: T | LinkListBlockSelect<T>;
+        techStack?: T | TechStackBlockSelect<T>;
       };
   meta?:
     | T
@@ -2338,6 +2368,26 @@ export interface LinkListBlockSelect<T extends boolean = true> {
               label?: T;
               appearance?: T;
             };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TechStackBlock_select".
+ */
+export interface TechStackBlockSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  items?:
+    | T
+    | {
+        row?: T;
+        title?: T;
+        icon?: T;
+        devicon?: T;
+        uploadIcon?: T;
         id?: T;
       };
   id?: T;
