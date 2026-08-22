@@ -45,7 +45,8 @@ export const TechStack: Block = {
           name: 'devicon',
           type: 'text',
           admin: {
-            description: 'Devicon class, e.g. "devicon-react-original colored"',
+            description:
+              'Devicon class, e.g. "devicon-react-original colored". Some icons only have wordmark variants, e.g. "devicon-amazonwebservices-original-wordmark colored".',
           },
         },
         {

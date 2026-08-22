@@ -15,6 +15,25 @@ function resolveIcon(slug: string | null | undefined) {
   return iconMap[key] ?? null
 }
 
+function parseDevicon(devicon?: string | null): { name: string; logoStyle: string } | null {
+  if (!devicon) return null
+  const parts = devicon.trim().split(/\s+/)
+  const classToken = parts.find((p) => p.startsWith('devicon-')) ?? parts[0]
+  if (!classToken) return null
+  const withoutPrefix = classToken.replace('devicon-', '')
+  const segments = withoutPrefix.split('-')
+  if (segments.length < 2) return null
+  let logoStyle = segments.pop()!
+  if (logoStyle === 'wordmark' && segments.length >= 2) {
+    const base = segments[segments.length - 1]
+    if (base === 'original' || base === 'plain' || base === 'line') {
+      logoStyle = `${segments.pop()!}-wordmark`
+    }
+  }
+  const name = segments.join('-')
+  return { name, logoStyle }
+}
+
 /* ------------------------------------------------------------------ */
 /*  Uploaded icon helpers                                             */
 /* ------------------------------------------------------------------ */
@@ -88,12 +107,13 @@ export const MarqueeBlock = (props: MarqueeBlockProps) => {
 /* ------------------------------------------------------------------ */
 
 const MarqueeItemCard = ({ item }: { item: MarqueeItem }) => {
-  const { title, icon, uploadIcon } = item
+  const { title, icon, devicon, uploadIcon } = item
 
-  // Uploaded icon takes precedence over simple-icons slug
+  // Uploaded icon takes precedence over devicon and simple-icons slug
   const uploadUrl = getUploadIconUrl(uploadIcon)
   const uploadAlt = getUploadIconAlt(uploadIcon)
-  const IconComponent = !uploadUrl && icon ? resolveIcon(icon) : null
+  const deviconProps = !uploadUrl ? parseDevicon(devicon) : null
+  const IconComponent = !uploadUrl && !deviconProps && icon ? resolveIcon(icon) : null
 
   return (
     <div
@@ -110,6 +130,14 @@ const MarqueeItemCard = ({ item }: { item: MarqueeItem }) => {
           width={22}
           height={22}
           className="size-[22px] object-contain"
+        />
+      ) : deviconProps ? (
+        <img
+          src={`https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${deviconProps.name}/${deviconProps.name}-${deviconProps.logoStyle}.svg`}
+          alt={title}
+          width={22}
+          height={22}
+          className="size-[22px] object-contain brightness-0"
         />
       ) : IconComponent ? (
         <span className="text-[var(--foreground)]/80">

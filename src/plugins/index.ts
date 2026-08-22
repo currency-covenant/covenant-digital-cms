@@ -75,6 +75,35 @@ export const plugins: Plugin[] = [
               }),
             }
           }
+          if (
+            'name' in field &&
+            field.name === 'fields' &&
+            'blocks' in field &&
+            field.type === 'blocks'
+          ) {
+            return {
+              ...field,
+              blocks: field.blocks.map((block) => ({
+                ...block,
+                // @ts-expect-error – row field type mismatch with flatMap return is benign
+                fields: block.fields.flatMap((subField) => {
+                  if (subField.type === 'row' && 'fields' in subField) {
+                    return [
+                      {
+                        ...subField,
+                        fields: subField.fields.filter(
+                          (rf) => !('name' in rf) || rf.name !== 'width',
+                        ),
+                      },
+                    ]
+                  }
+                  return !('name' in subField) || subField.name === 'width'
+                    ? []
+                    : [subField]
+                }),
+              })),
+            }
+          }
           return field
         })
       },

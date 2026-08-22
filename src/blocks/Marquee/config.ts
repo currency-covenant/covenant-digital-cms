@@ -30,6 +30,15 @@ export const Marquee: Block = {
           },
         },
         {
+          name: 'devicon',
+          type: 'text',
+          label: 'Devicon',
+          admin: {
+            description:
+              'Devicon class, e.g. "devicon-react-original colored". Some icons only have wordmark variants, e.g. "devicon-amazonwebservices-original-wordmark colored".',
+          },
+        },
+        {
           name: 'uploadIcon',
           type: 'upload',
           relationTo: 'media',
