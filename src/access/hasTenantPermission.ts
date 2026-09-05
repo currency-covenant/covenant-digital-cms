@@ -17,20 +17,22 @@ export const hasTenantPermission = async ({
   if (!req.user) return accessResult
   if (isSuperAdmin(req.user)) return accessResult
 
+  const userTenantIDs = (req.user?.tenants || [])
+    .map((t: any) => extractID(t.tenant))
+    .filter((id: any): id is string | number => id !== null && id !== undefined)
+
   const selectedTenant = getTenantFromCookie(
     req.headers,
     getCollectionIDType({ payload: req.payload, collectionSlug: 'tenants' }),
   )
 
+  // Prefer the cookie-selected tenant, but only if it is actually assigned to this user.
+  // Otherwise fall back to the user's own tenants (handles stale `payload-tenant` cookies).
   const tenantIDsToCheck: (string | number)[] = []
-  if (selectedTenant) {
+  if (selectedTenant && userTenantIDs.includes(selectedTenant)) {
     tenantIDsToCheck.push(selectedTenant)
   } else {
-    const userTenants = req.user?.tenants || []
-    for (const t of userTenants) {
-      const id = extractID(t.tenant)
-      if (id) tenantIDsToCheck.push(id)
-    }
+    tenantIDsToCheck.push(...userTenantIDs)
   }
 
   if (tenantIDsToCheck.length === 0) return false
@@ -40,17 +42,28 @@ export const hasTenantPermission = async ({
 
   for (const tenantId of tenantIDsToCheck) {
     if (req.context.tenantPermissions[tenantId] === undefined) {
-      const tenant = await req.payload.findByID({
-        collection: 'tenants',
-        id: tenantId,
-        depth: 0,
-        select: { permissions: true },
-        req,
-      })
-      req.context.tenantPermissions[tenantId] = (tenant?.permissions as string[]) || []
+      let permissions: string[] | undefined
+      try {
+        const tenant = await req.payload.findByID({
+          collection: 'tenants',
+          id: tenantId,
+          depth: 0,
+          select: { permissions: true },
+          req,
+        })
+        permissions = tenant?.permissions as string[] | undefined
+      } catch {
+        // Tenant lookup can fail (e.g. missing/stale reference); treat as unrestricted
+        // so a failed permissions lookup does not silently block every operation.
+        permissions = undefined
+      }
+      req.context.tenantPermissions[tenantId] = permissions ?? []
     }
 
-    if (req.context.tenantPermissions[tenantId].includes(collectionSlug)) {
+    const tenantPermissions = req.context.tenantPermissions[tenantId]
+
+    // A tenant with no configured permission list is unrestricted (legacy tenants).
+    if (tenantPermissions.length === 0 || tenantPermissions.includes(collectionSlug)) {
       return accessResult
     }
   }
