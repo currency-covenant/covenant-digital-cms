@@ -17,7 +17,7 @@ function getMediaUrl(media: unknown): string | undefined {
   return undefined
 }
 
-export function PageMetadata({ page, siteUrl = '', siteName = 'Covenant Digital' }: PageMetadataProps) {
+export function PageMetadata({ page, siteUrl = '', siteName = 'Lbdluxe' }: PageMetadataProps) {
   const title = page.meta?.title || page.title
   const fullTitle = title ? `${title} | ${siteName}` : siteName
   const description = page.meta?.description || undefined
@@ -49,7 +49,7 @@ export function PageMetadata({ page, siteUrl = '', siteName = 'Covenant Digital'
 
 export function generatePageMetadata(page: Page): Record<string, unknown> {
   const title = page.meta?.title || page.title
-  const fullTitle = title ? `${title} | Covenant Digital` : 'Covenant Digital'
+  const fullTitle = title ? `${title} | Lbdluxe` : 'Lbdluxe'
   const description = page.meta?.description || undefined
   const ogImage = page.meta?.image ? getMediaUrl(page.meta.image) : undefined
 

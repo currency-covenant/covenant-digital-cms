@@ -55,8 +55,8 @@ export default buildConfig({
   }),
   editor: lexicalEditor({}),
   email: resendAdapter({
-    defaultFromAddress: process.env.RESEND_FROM_ADDRESS || "noreply@covenant.digital",
-    defaultFromName: process.env.RESEND_FROM_NAME || "Covenant Digital",
+    defaultFromAddress: process.env.RESEND_FROM_ADDRESS || "noreply@lbdluxe.digital",
+    defaultFromName: process.env.RESEND_FROM_NAME || "Lbdluxe",
     apiKey: process.env.RESEND_API_KEY || "",
   }),
   graphQL: {

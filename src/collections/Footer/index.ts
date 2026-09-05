@@ -151,7 +151,7 @@ export const Footer: CollectionConfig = {
       required: false,
       label: 'Copyright Text',
       admin: {
-        description: 'e.g. © 2024 Covenant Digital. All rights reserved.',
+        description: 'e.g. © 2024 Lbdluxe. All rights reserved.',
       },
     },
     {

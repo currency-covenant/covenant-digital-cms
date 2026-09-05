@@ -1717,7 +1717,7 @@ export interface Footer {
   newsletterPlaceholder?: string | null;
   newsletterButtonLabel?: string | null;
   /**
-   * e.g. © 2024 Covenant Digital. All rights reserved.
+   * e.g. © 2024 Lbdluxe. All rights reserved.
    */
   copyrightText?: string | null;
   /**

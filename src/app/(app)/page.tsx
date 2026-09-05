@@ -18,8 +18,8 @@ const Page = async ({
       </p>
       <p>
         For example, visiting{" "}
-        <a href="http://gold.localhost:3000/tenant-domains/login">test link</a>{" "}
-        will show the tenant with the domain &quot;gold.localhost&quot;.
+        <a href="http://lbdluxe.localhost:3000/tenant-domains/login">test link</a>{" "}
+        will show the tenant with the domain &quot;lbdluxe.localhost&quot;.
       </p>
 
       <h2>Slugs</h2>
@@ -29,10 +29,10 @@ const Page = async ({
       </p>
       <p>
         For example, visiting{" "}
-        <a href="http://localhost:3000/tenant-slugs/silver/login">
-          http://localhost:3000/tenant-slugs/silver/login
+        <a href="http://localhost:3000/tenant-slugs/lbdluxe/login">
+          http://localhost:3000/tenant-slugs/lbdluxe/login
         </a>{" "}
-        will show the tenant with the slug &quot;silver&quot;.
+        will show the tenant with the slug &quot;lbdluxe&quot;.
       </p>
     </div>
   );

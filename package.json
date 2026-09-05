@@ -1,7 +1,7 @@
 {
-  "name": "covenant-digital-cms",
+  "name": "lbdluxecms",
   "version": "1.0.0",
-  "description": "An example of a multi tenant application with Payload",
+  "description": "Multi-tenant CMS for Lbdluxe",
   "license": "MIT",
   "type": "module",
   "scripts": {
