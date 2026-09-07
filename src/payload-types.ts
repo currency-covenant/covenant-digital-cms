@@ -316,33 +316,6 @@ export interface Tenant {
    * If checked, logging in is not required to read. Useful for building public pages.
    */
   allowPublicRead?: boolean | null;
-  /**
-   * Which collections this tenant can access in the admin panel.
-   */
-  permissions?:
-    | (
-        | 'pages'
-        | 'posts'
-        | 'products'
-        | 'works'
-        | 'shelf-items'
-        | 'shelf-categories'
-        | 'authors'
-        | 'links-profile'
-        | 'profile-links'
-        | 'content-network'
-        | 'media'
-        | 'categories'
-        | 'orders'
-        | 'carts'
-        | 'transactions'
-        | 'addresses'
-        | 'variants'
-        | 'variantTypes'
-        | 'variantOptions'
-        | 'header'
-      )[]
-    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -2690,7 +2663,6 @@ export interface TenantsSelect<T extends boolean = true> {
   domain?: T;
   slug?: T;
   allowPublicRead?: T;
-  permissions?: T;
   updatedAt?: T;
   createdAt?: T;
 }

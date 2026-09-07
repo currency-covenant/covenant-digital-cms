@@ -54,50 +54,5 @@ export const Tenants: CollectionConfig = {
       defaultValue: false,
       index: true,
     },
-    {
-      name: 'permissions',
-      type: 'select',
-      hasMany: true,
-      options: [
-        { label: 'Pages', value: 'pages' },
-        { label: 'Posts', value: 'posts' },
-        { label: 'Products', value: 'products' },
-        { label: 'Works', value: 'works' },
-        { label: 'Shelf Items', value: 'shelf-items' },
-        { label: 'Shelf Categories', value: 'shelf-categories' },
-        { label: 'Authors', value: 'authors' },
-        { label: 'Links Profile', value: 'links-profile' },
-        { label: 'Profile Links', value: 'profile-links' },
-        { label: 'Content Network', value: 'content-network' },
-        { label: 'Media', value: 'media' },
-        { label: 'Categories', value: 'categories' },
-        { label: 'Orders', value: 'orders' },
-        { label: 'Carts', value: 'carts' },
-        { label: 'Transactions', value: 'transactions' },
-        { label: 'Addresses', value: 'addresses' },
-        { label: 'Variants', value: 'variants' },
-        { label: 'Variant Types', value: 'variantTypes' },
-        { label: 'Variant Options', value: 'variantOptions' },
-        { label: 'Header', value: 'header' },
-      ],
-      defaultValue: ['pages', 'posts', 'products', 'works', 'shelf-items', 'shelf-categories', 'authors', 'links-profile', 'profile-links', 'content-network', 'media', 'categories', 'orders', 'carts', 'transactions', 'addresses', 'variants', 'variantTypes', 'variantOptions', 'header'],
-      admin: {
-        position: 'sidebar',
-        description: 'Which collections this tenant can access in the admin panel.',
-      },
-      access: {
-        create: ({ req }) => {
-          if (!req.user) return false
-          if (isSuperAdmin(req.user)) return true
-          return getUserTenantIDs(req.user, 'tenant-admin').length > 0
-        },
-        update: ({ req }) => {
-          if (!req.user) return false
-          if (isSuperAdmin(req.user)) return true
-          return getUserTenantIDs(req.user, 'tenant-admin').length > 0
-        },
-        read: ({ req }) => !!req.user,
-      },
-    },
-  ],
+    ],
 }
