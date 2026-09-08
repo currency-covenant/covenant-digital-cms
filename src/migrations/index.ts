@@ -6,11 +6,17 @@ import * as migration_20260620_drop_links_profile_correct from './20260620_drop_
 import * as migration_20260620_fix_tenants_permissions from './20260620_fix_tenants_permissions';
 import * as migration_20260620_profile_links from './20260620_profile_links';
 import * as migration_20260620_content_network from './20260620_content_network';
+import * as migration_20260908_remove_tenancy from './20260908_remove_tenancy';
 
 export const migrations = [
   {
     up: migration_20260620_content_network.up,
     down: migration_20260620_content_network.down,
     name: '20260620_content_network'
+  },
+  {
+    up: migration_20260908_remove_tenancy.up,
+    down: migration_20260908_remove_tenancy.down,
+    name: '20260908_remove_tenancy'
   },
 ];
