@@ -1,7 +1,7 @@
 {
   "name": "lbdluxecms",
   "version": "1.0.0",
-  "description": "Multi-tenant CMS for Lbdluxe",
+  "description": "CMS for Lbdluxe",
   "license": "MIT",
   "type": "module",
   "scripts": {
@@ -11,8 +11,10 @@
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
     "generate:schema": "payload-graphql generate:schema",
     "generate:types": "payload generate:types",
+    "migrate": "cross-env NODE_OPTIONS=--no-deprecation payload migrate",
+    "migrate:create": "cross-env NODE_OPTIONS=--no-deprecation payload migrate:create",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
-    "start": "cross-env NODE_OPTIONS='--no-deprecation --max-old-space-size=4096' next start"
+    "start": "cross-env NODE_OPTIONS='--no-deprecation --max-old-space-size=4096' payload migrate && next start"
   },
   "dependencies": {
     "@payloadcms/db-mongodb": "3.85.0",
@@ -21,7 +23,6 @@
     "@payloadcms/next": "3.85.0",
     "@payloadcms/plugin-ecommerce": "3.85.0",
     "@payloadcms/plugin-form-builder": "^3.85.0",
-    "@payloadcms/plugin-multi-tenant": "3.85.0",
     "@payloadcms/plugin-nested-docs": "^3.85.0",
     "@payloadcms/plugin-redirects": "^3.85.0",
     "@payloadcms/plugin-search": "^3.85.0",

@@ -1,25 +1,16 @@
 import type { CollectionConfig } from 'payload'
-import { isSuperAdmin } from '@/access/isSuperAdmin'
-import { getUserTenantIDs } from '@/utilities/getUserTenantIDs'
+import { isSuperAdminAccess } from '@/access/isSuperAdmin'
 
 export const AuditLogs: CollectionConfig = {
   slug: 'audit-logs',
   admin: {
     group: 'System',
-    defaultColumns: ['action', 'collection', 'user', 'tenant', 'timestamp'],
+    defaultColumns: ['action', 'collection', 'user', 'timestamp'],
     description: 'Audit trail of all content changes',
   },
   access: {
     create: () => false,
-    read: ({ req }) => {
-      if (!req.user) return false
-      if (isSuperAdmin(req.user)) return true
-      return {
-        tenant: {
-          in: getUserTenantIDs(req.user, 'tenant-admin'),
-        },
-      }
-    },
+    read: isSuperAdminAccess,
     update: () => false,
     delete: () => false,
   },
@@ -52,11 +43,6 @@ export const AuditLogs: CollectionConfig = {
       name: 'user',
       type: 'relationship',
       relationTo: 'users',
-    },
-    {
-      name: 'tenant',
-      type: 'relationship',
-      relationTo: 'tenants',
     },
     {
       name: 'timestamp',

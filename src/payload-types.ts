@@ -83,7 +83,6 @@ export interface Config {
     media: Media;
     categories: Category;
     users: User;
-    tenants: Tenant;
     'api-keys': ApiKey;
     webhooks: Webhook;
     'audit-logs': AuditLog;
@@ -136,7 +135,6 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
-    tenants: TenantsSelect<false> | TenantsSelect<true>;
     'api-keys': ApiKeysSelect<false> | ApiKeysSelect<true>;
     webhooks: WebhooksSelect<false> | WebhooksSelect<true>;
     'audit-logs': AuditLogsSelect<false> | AuditLogsSelect<true>;
@@ -223,7 +221,6 @@ export interface UserAuthOperations {
  */
 export interface Page {
   id: number;
-  tenant?: (number | null) | Tenant;
   title: string;
   hero: {
     type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
@@ -299,33 +296,10 @@ export interface Page {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "tenants".
- */
-export interface Tenant {
-  id: number;
-  name: string;
-  /**
-   * Used for domain-based tenant handling
-   */
-  domain?: string | null;
-  /**
-   * Used for url paths, example: /tenant-slug/page-slug
-   */
-  slug: string;
-  /**
-   * If checked, logging in is not required to read. Useful for building public pages.
-   */
-  allowPublicRead?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts".
  */
 export interface Post {
   id: number;
-  tenant?: (number | null) | Tenant;
   title: string;
   heroImage?: (number | null) | Media;
   content: {
@@ -376,7 +350,6 @@ export interface Post {
  */
 export interface Media {
   id: number;
-  tenant?: (number | null) | Tenant;
   alt?: string | null;
   caption?: {
     root: {
@@ -497,7 +470,6 @@ export interface FolderInterface {
  */
 export interface Category {
   id: number;
-  tenant?: (number | null) | Tenant;
   title: string;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
@@ -545,13 +517,6 @@ export interface User {
     hasNextPage?: boolean;
     totalDocs?: number;
   };
-  tenants?:
-    | {
-        tenant: number | Tenant;
-        roles: ('tenant-admin' | 'tenant-publisher' | 'tenant-editor' | 'tenant-viewer')[];
-        id?: string | null;
-      }[]
-    | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -576,7 +541,6 @@ export interface User {
  */
 export interface Order {
   id: number;
-  tenant?: (number | null) | Tenant;
   items?:
     | {
         product?: (number | null) | Product;
@@ -614,7 +578,6 @@ export interface Order {
  */
 export interface Product {
   id: number;
-  tenant?: (number | null) | Tenant;
   title: string;
   description?: {
     root: {
@@ -676,7 +639,6 @@ export interface Product {
 export interface VariantOption {
   id: number;
   _variantOptions_options_order?: string | null;
-  tenant?: (number | null) | Tenant;
   variantType: number | VariantType;
   label: string;
   /**
@@ -693,7 +655,6 @@ export interface VariantOption {
  */
 export interface VariantType {
   id: number;
-  tenant?: (number | null) | Tenant;
   label: string;
   name: string;
   options?: {
@@ -822,7 +783,6 @@ export interface MediaBlock {
  */
 export interface Variant {
   id: number;
-  tenant?: (number | null) | Tenant;
   /**
    * Used for administrative purposes, not shown to customers. This is populated by default.
    */
@@ -843,7 +803,6 @@ export interface Variant {
  */
 export interface Transaction {
   id: number;
-  tenant?: (number | null) | Tenant;
   items?:
     | {
         product?: (number | null) | Product;
@@ -886,7 +845,6 @@ export interface Transaction {
  */
 export interface Cart {
   id: number;
-  tenant?: (number | null) | Tenant;
   items?:
     | {
         product?: (number | null) | Product;
@@ -910,7 +868,6 @@ export interface Cart {
  */
 export interface Address {
   id: number;
-  tenant?: (number | null) | Tenant;
   customer?: (number | null) | User;
   title?: string | null;
   firstName?: string | null;
@@ -1374,7 +1331,6 @@ export interface TechStackBlock {
  */
 export interface ShelfItem {
   id: number;
-  tenant?: (number | null) | Tenant;
   title: string;
   shelfCategories?: (number | ShelfCategory)[] | null;
   description?: string | null;
@@ -1419,7 +1375,6 @@ export interface ShelfItem {
  */
 export interface ShelfCategory {
   id: number;
-  tenant?: (number | null) | Tenant;
   title: string;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
@@ -1435,7 +1390,6 @@ export interface ShelfCategory {
  */
 export interface Author {
   id: number;
-  tenant?: (number | null) | Tenant;
   title: string;
   updatedAt: string;
   createdAt: string;
@@ -1446,7 +1400,6 @@ export interface Author {
  */
 export interface LinksProfile {
   id: number;
-  tenant?: (number | null) | Tenant;
   name: string;
   handle?: string | null;
   bio?: string | null;
@@ -1470,7 +1423,6 @@ export interface LinksProfile {
  */
 export interface ProfileLink {
   id: number;
-  tenant?: (number | null) | Tenant;
   title: string;
   url: string;
   linkType: 'lg' | 'sm';
@@ -1489,7 +1441,6 @@ export interface ProfileLink {
  */
 export interface ContentNetwork {
   id: number;
-  tenant?: (number | null) | Tenant;
   title: string;
   url: string;
   hexColor?: string | null;
@@ -1507,8 +1458,6 @@ export interface ApiKey {
   id: number;
   name: string;
   key: string;
-  tenant: number | Tenant;
-  roles: ('tenant-viewer' | 'tenant-editor' | 'tenant-publisher' | 'tenant-admin')[];
   expiresAt?: string | null;
   lastUsedAt?: string | null;
   updatedAt: string;
@@ -1535,7 +1484,6 @@ export interface Webhook {
     | 'transactions'
     | 'header'
   )[];
-  tenant: number | Tenant;
   enabled?: boolean | null;
   updatedAt: string;
   createdAt: string;
@@ -1561,7 +1509,6 @@ export interface AuditLog {
     | boolean
     | null;
   user?: (number | null) | User;
-  tenant?: (number | null) | Tenant;
   timestamp: string;
   updatedAt: string;
   createdAt: string;
@@ -1572,7 +1519,6 @@ export interface AuditLog {
  */
 export interface Header {
   id: number;
-  tenant?: (number | null) | Tenant;
   /**
    * Internal label for this header config (e.g. "Main Nav").
    */
@@ -1635,7 +1581,6 @@ export interface Header {
  */
 export interface Footer {
   id: number;
-  tenant?: (number | null) | Tenant;
   /**
    * Internal label for this footer config (e.g. "Main Footer").
    */
@@ -1955,10 +1900,6 @@ export interface PayloadLockedDocument {
         value: number | User;
       } | null)
     | ({
-        relationTo: 'tenants';
-        value: number | Tenant;
-      } | null)
-    | ({
         relationTo: 'api-keys';
         value: number | ApiKey;
       } | null)
@@ -2077,7 +2018,6 @@ export interface PayloadMigration {
  * via the `definition` "pages_select".
  */
 export interface PagesSelect<T extends boolean = true> {
-  tenant?: T;
   title?: T;
   hero?:
     | T
@@ -2368,7 +2308,6 @@ export interface TechStackBlockSelect<T extends boolean = true> {
  * via the `definition` "posts_select".
  */
 export interface PostsSelect<T extends boolean = true> {
-  tenant?: T;
   title?: T;
   heroImage?: T;
   content?: T;
@@ -2400,7 +2339,6 @@ export interface PostsSelect<T extends boolean = true> {
  * via the `definition` "shelf-items_select".
  */
 export interface ShelfItemsSelect<T extends boolean = true> {
-  tenant?: T;
   title?: T;
   shelfCategories?: T;
   description?: T;
@@ -2427,7 +2365,6 @@ export interface ShelfItemsSelect<T extends boolean = true> {
  * via the `definition` "shelf-categories_select".
  */
 export interface ShelfCategoriesSelect<T extends boolean = true> {
-  tenant?: T;
   title?: T;
   generateSlug?: T;
   slug?: T;
@@ -2439,7 +2376,6 @@ export interface ShelfCategoriesSelect<T extends boolean = true> {
  * via the `definition` "authors_select".
  */
 export interface AuthorsSelect<T extends boolean = true> {
-  tenant?: T;
   title?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -2449,7 +2385,6 @@ export interface AuthorsSelect<T extends boolean = true> {
  * via the `definition` "links-profile_select".
  */
 export interface LinksProfileSelect<T extends boolean = true> {
-  tenant?: T;
   name?: T;
   handle?: T;
   bio?: T;
@@ -2472,7 +2407,6 @@ export interface LinksProfileSelect<T extends boolean = true> {
  * via the `definition` "profile-links_select".
  */
 export interface ProfileLinksSelect<T extends boolean = true> {
-  tenant?: T;
   title?: T;
   url?: T;
   linkType?: T;
@@ -2490,7 +2424,6 @@ export interface ProfileLinksSelect<T extends boolean = true> {
  * via the `definition` "content-network_select".
  */
 export interface ContentNetworkSelect<T extends boolean = true> {
-  tenant?: T;
   title?: T;
   url?: T;
   hexColor?: T;
@@ -2505,7 +2438,6 @@ export interface ContentNetworkSelect<T extends boolean = true> {
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
-  tenant?: T;
   alt?: T;
   caption?: T;
   prefix?: T;
@@ -2601,7 +2533,6 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "categories_select".
  */
 export interface CategoriesSelect<T extends boolean = true> {
-  tenant?: T;
   title?: T;
   generateSlug?: T;
   slug?: T;
@@ -2630,13 +2561,6 @@ export interface UsersSelect<T extends boolean = true> {
   orders?: T;
   cart?: T;
   addresses?: T;
-  tenants?:
-    | T
-    | {
-        tenant?: T;
-        roles?: T;
-        id?: T;
-      };
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -2656,25 +2580,11 @@ export interface UsersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "tenants_select".
- */
-export interface TenantsSelect<T extends boolean = true> {
-  name?: T;
-  domain?: T;
-  slug?: T;
-  allowPublicRead?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "api-keys_select".
  */
 export interface ApiKeysSelect<T extends boolean = true> {
   name?: T;
   key?: T;
-  tenant?: T;
-  roles?: T;
   expiresAt?: T;
   lastUsedAt?: T;
   updatedAt?: T;
@@ -2690,7 +2600,6 @@ export interface WebhooksSelect<T extends boolean = true> {
   secret?: T;
   events?: T;
   collections?: T;
-  tenant?: T;
   enabled?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -2705,7 +2614,6 @@ export interface AuditLogsSelect<T extends boolean = true> {
   docId?: T;
   diff?: T;
   user?: T;
-  tenant?: T;
   timestamp?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -2715,7 +2623,6 @@ export interface AuditLogsSelect<T extends boolean = true> {
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
-  tenant?: T;
   title?: T;
   logo?: T;
   navLinks?:
@@ -2756,7 +2663,6 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
-  tenant?: T;
   title?: T;
   logo?: T;
   description?: T;
@@ -2815,7 +2721,6 @@ export interface FooterSelect<T extends boolean = true> {
  * via the `definition` "addresses_select".
  */
 export interface AddressesSelect<T extends boolean = true> {
-  tenant?: T;
   customer?: T;
   title?: T;
   firstName?: T;
@@ -2836,7 +2741,6 @@ export interface AddressesSelect<T extends boolean = true> {
  * via the `definition` "variants_select".
  */
 export interface VariantsSelect<T extends boolean = true> {
-  tenant?: T;
   title?: T;
   product?: T;
   options?: T;
@@ -2853,7 +2757,6 @@ export interface VariantsSelect<T extends boolean = true> {
  * via the `definition` "variantTypes_select".
  */
 export interface VariantTypesSelect<T extends boolean = true> {
-  tenant?: T;
   label?: T;
   name?: T;
   options?: T;
@@ -2867,7 +2770,6 @@ export interface VariantTypesSelect<T extends boolean = true> {
  */
 export interface VariantOptionsSelect<T extends boolean = true> {
   _variantOptions_options_order?: T;
-  tenant?: T;
   variantType?: T;
   label?: T;
   value?: T;
@@ -2880,7 +2782,6 @@ export interface VariantOptionsSelect<T extends boolean = true> {
  * via the `definition` "products_select".
  */
 export interface ProductsSelect<T extends boolean = true> {
-  tenant?: T;
   title?: T;
   description?: T;
   gallery?:
@@ -2924,7 +2825,6 @@ export interface ProductsSelect<T extends boolean = true> {
  * via the `definition` "carts_select".
  */
 export interface CartsSelect<T extends boolean = true> {
-  tenant?: T;
   items?:
     | T
     | {
@@ -2947,7 +2847,6 @@ export interface CartsSelect<T extends boolean = true> {
  * via the `definition` "orders_select".
  */
 export interface OrdersSelect<T extends boolean = true> {
-  tenant?: T;
   items?:
     | T
     | {
@@ -2986,7 +2885,6 @@ export interface OrdersSelect<T extends boolean = true> {
  * via the `definition` "transactions_select".
  */
 export interface TransactionsSelect<T extends boolean = true> {
-  tenant?: T;
   items?:
     | T
     | {

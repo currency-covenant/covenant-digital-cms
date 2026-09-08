@@ -1,6 +1,5 @@
 import type { CollectionAfterChangeHook, CollectionAfterDeleteHook } from 'payload'
 import crypto from 'crypto'
-import { extractID } from '@/utilities/extractID'
 
 const getEventType = (
   operation: string,
@@ -21,16 +20,12 @@ const triggerWebhooksForDoc = async (
   doc: any,
   previousDoc?: any,
 ) => {
-  const tenantID = extractID(doc?.tenant)
-  if (!tenantID) return
-
   try {
     const webhooks = await req.payload.find({
       collection: 'webhooks',
       where: {
         and: [
           { enabled: { equals: true } },
-          { tenant: { equals: tenantID } },
           { events: { contains: event } },
           { collections: { contains: collection } },
         ],

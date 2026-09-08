@@ -1,9 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { APIError } from 'payload'
 import crypto from 'crypto'
-import { isSuperAdmin } from '@/access/isSuperAdmin'
-import { isSuperAdminAccess } from '@/access/isSuperAdmin'
-import { getUserTenantIDs } from '@/utilities/getUserTenantIDs'
+import { isSuperAdmin, isSuperAdminAccess } from '@/access/isSuperAdmin'
 import { hashAPIKey } from '@/utilities/hashKey'
 import { generateKey } from './hooks/generateKey'
 
@@ -15,25 +13,9 @@ export const APIKeys: CollectionConfig = {
   },
   access: {
     create: isSuperAdminAccess,
-    read: ({ req }) => {
-      if (!req.user) return false
-      if (isSuperAdmin(req.user)) return true
-      return {
-        tenant: {
-          in: getUserTenantIDs(req.user, 'tenant-admin'),
-        },
-      }
-    },
+    read: isSuperAdminAccess,
     update: isSuperAdminAccess,
-    delete: ({ req }) => {
-      if (!req.user) return false
-      if (isSuperAdmin(req.user)) return true
-      return {
-        tenant: {
-          in: getUserTenantIDs(req.user, 'tenant-admin'),
-        },
-      }
-    },
+    delete: isSuperAdminAccess,
   },
   fields: [
     {
@@ -55,25 +37,6 @@ export const APIKeys: CollectionConfig = {
       access: {
         read: () => false,
       },
-    },
-    {
-      name: 'tenant',
-      type: 'relationship',
-      relationTo: 'tenants',
-      required: true,
-    },
-    {
-      name: 'roles',
-      type: 'select',
-      hasMany: true,
-      required: true,
-      defaultValue: ['tenant-viewer'],
-      options: [
-        { label: 'Tenant Viewer', value: 'tenant-viewer' },
-        { label: 'Tenant Editor', value: 'tenant-editor' },
-        { label: 'Tenant Publisher', value: 'tenant-publisher' },
-        { label: 'Tenant Admin', value: 'tenant-admin' },
-      ],
     },
     {
       name: 'expiresAt',
@@ -108,10 +71,10 @@ export const APIKeys: CollectionConfig = {
         if (typeof req.json === 'function') {
           data = await req.json()
         }
-        const { name, tenant, roles } = data
+        const { name } = data
 
-        if (!name || !tenant) {
-          throw new APIError('Name and tenant are required', 400)
+        if (!name) {
+          throw new APIError('Name is required', 400)
         }
 
         const rawKey = `cms_${crypto.randomBytes(32).toString('hex')}`
@@ -122,8 +85,6 @@ export const APIKeys: CollectionConfig = {
           data: {
             name,
             key: hashedKey,
-            tenant,
-            roles: roles || ['tenant-viewer'],
           },
           req,
           overrideAccess: true,
@@ -132,8 +93,6 @@ export const APIKeys: CollectionConfig = {
         return Response.json({
           id: doc.id,
           name: doc.name,
-          tenant: doc.tenant,
-          roles: doc.roles,
           rawKey,
         })
       },
@@ -184,14 +143,10 @@ export const APIKeys: CollectionConfig = {
           overrideAccess: true,
         })
 
-        const tenantID = typeof keyDoc.tenant === 'object' ? keyDoc.tenant.id : keyDoc.tenant
-
         return Response.json({
           valid: true,
           keyId: keyDoc.id,
           name: keyDoc.name,
-          tenant: tenantID,
-          roles: keyDoc.roles,
         })
       },
     },

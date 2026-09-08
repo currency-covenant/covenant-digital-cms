@@ -1,5 +1,4 @@
 import type { CollectionAfterChangeHook, CollectionAfterDeleteHook } from 'payload'
-import { extractID } from '@/utilities/extractID'
 
 export const logAuditAfterChange: CollectionAfterChangeHook = async ({
   req,
@@ -13,8 +12,6 @@ export const logAuditAfterChange: CollectionAfterChangeHook = async ({
   if (collectionSlug === 'audit-logs' || collectionSlug === 'webhooks' || collectionSlug === 'api-keys') return
 
   if (operation !== 'create' && operation !== 'update') return
-
-  const tenantID = extractID(doc?.tenant)
 
   const diff: Record<string, any> = {}
   if (previousDoc && operation === 'update') {
@@ -37,7 +34,6 @@ export const logAuditAfterChange: CollectionAfterChangeHook = async ({
         docId: doc.id as string,
         diff: Object.keys(diff).length > 0 ? diff : undefined,
         user: req.user?.id || undefined,
-        tenant: tenantID || undefined,
         timestamp: new Date().toISOString(),
       },
       req,
@@ -57,8 +53,6 @@ export const logAuditAfterDelete: CollectionAfterDeleteHook = async ({
 
   if (collectionSlug === 'audit-logs' || collectionSlug === 'webhooks' || collectionSlug === 'api-keys') return
 
-  const tenantID = extractID(doc?.tenant)
-
   try {
     await req.payload.create({
       collection: 'audit-logs',
@@ -67,7 +61,6 @@ export const logAuditAfterDelete: CollectionAfterDeleteHook = async ({
         collection: collectionSlug,
         docId: doc.id as string,
         user: req.user?.id || undefined,
-        tenant: tenantID || undefined,
         timestamp: new Date().toISOString(),
       },
       req,

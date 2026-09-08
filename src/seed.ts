@@ -1,15 +1,6 @@
 import { Config } from 'payload'
 
 export const seed: NonNullable<Config['onInit']> = async (payload): Promise<void> => {
-  const tenant = await payload.create({
-    collection: 'tenants',
-    data: {
-      name: 'Lbdluxe',
-      slug: 'lbdluxe',
-      domain: 'lbdluxe.localhost',
-    },
-  })
-
   await payload.create({
     collection: 'users',
     data: {
@@ -24,12 +15,7 @@ export const seed: NonNullable<Config['onInit']> = async (payload): Promise<void
     data: {
       email: 'admin@lbdluxe.digital',
       password: 'demo',
-      tenants: [
-        {
-          roles: ['tenant-admin'],
-          tenant: tenant.id,
-        },
-      ],
+      roles: ['user'],
       username: 'lbdluxe',
     },
   })
@@ -39,7 +25,6 @@ export const seed: NonNullable<Config['onInit']> = async (payload): Promise<void
     draft: true,
     data: {
       slug: 'home',
-      tenant: tenant.id,
       title: 'Home',
     },
   })

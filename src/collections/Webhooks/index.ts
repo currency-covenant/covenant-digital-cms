@@ -1,6 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { isSuperAdmin } from '@/access/isSuperAdmin'
-import { getUserTenantIDs } from '@/utilities/getUserTenantIDs'
+import { isSuperAdminAccess } from '@/access/isSuperAdmin'
 
 export const Webhooks: CollectionConfig = {
   slug: 'webhooks',
@@ -9,38 +8,10 @@ export const Webhooks: CollectionConfig = {
     group: 'System',
   },
   access: {
-    create: ({ req }) => {
-      if (!req.user) return false
-      if (isSuperAdmin(req.user)) return true
-      return getUserTenantIDs(req.user, 'tenant-admin').length > 0
-    },
-    read: ({ req }) => {
-      if (!req.user) return false
-      if (isSuperAdmin(req.user)) return true
-      return {
-        tenant: {
-          in: getUserTenantIDs(req.user),
-        },
-      }
-    },
-    update: ({ req }) => {
-      if (!req.user) return false
-      if (isSuperAdmin(req.user)) return true
-      return {
-        tenant: {
-          in: getUserTenantIDs(req.user, 'tenant-admin'),
-        },
-      }
-    },
-    delete: ({ req }) => {
-      if (!req.user) return false
-      if (isSuperAdmin(req.user)) return true
-      return {
-        tenant: {
-          in: getUserTenantIDs(req.user, 'tenant-admin'),
-        },
-      }
-    },
+    create: isSuperAdminAccess,
+    read: isSuperAdminAccess,
+    update: isSuperAdminAccess,
+    delete: isSuperAdminAccess,
   },
   fields: [
     {
@@ -89,12 +60,6 @@ export const Webhooks: CollectionConfig = {
         { label: 'Transactions', value: 'transactions' },
         { label: 'Header', value: 'header' },
       ],
-    },
-    {
-      name: 'tenant',
-      type: 'relationship',
-      relationTo: 'tenants',
-      required: true,
     },
     {
       name: 'enabled',

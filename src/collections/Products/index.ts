@@ -5,7 +5,6 @@ import type { DefaultDocumentIDType, Where } from 'payload'
 import { CallToAction } from '@/blocks/CallToAction/config'
 import { Content } from '@/blocks/Content/config'
 import { MediaBlock } from '@/blocks/MediaBlock/config'
-import { setTenantFromUser } from '@/hooks/setTenantFromUser'
 import { populatePublishedAt } from '@/hooks/populatePublishedAt'
 import { triggerWebhookAfterChange, triggerWebhookAfterDelete } from '@/hooks/triggerWebhooks'
 import { logAuditAfterChange, logAuditAfterDelete } from '@/hooks/logAuditEvent'
@@ -199,7 +198,6 @@ export const ProductsCollection: CollectionOverride = ({ defaultCollection }) =>
     slugField(),
   ],
   hooks: {
-    beforeValidate: [setTenantFromUser],
     beforeChange: [populatePublishedAt],
     afterChange: [revalidateProduct, triggerWebhookAfterChange, logAuditAfterChange],
     afterDelete: [revalidateProductDelete, triggerWebhookAfterDelete, logAuditAfterDelete],
