@@ -62,11 +62,13 @@ export default buildConfig({
   },
   cors: [
     'http://localhost:3000',
+    'https://cms.lbdluxe.com',
     ...(process.env.PAYLOAD_PUBLIC_SERVER_URL ? [process.env.PAYLOAD_PUBLIC_SERVER_URL] : []),
     ...(process.env.ALLOWED_ORIGINS?.split(',') || []),
   ],
   csrf: [
     'http://localhost:3000',
+    'https://cms.lbdluxe.com',
     ...(process.env.PAYLOAD_PUBLIC_SERVER_URL ? [process.env.PAYLOAD_PUBLIC_SERVER_URL] : []),
     ...(process.env.ALLOWED_ORIGINS?.split(',') || []),
   ],
