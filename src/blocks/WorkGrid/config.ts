@@ -32,6 +32,28 @@ export const WorkGrid: Block = {
           type: 'text',
         },
         {
+          name: 'linkDisplay',
+          type: 'select',
+          defaultValue: 'both',
+          options: [
+            {
+              label: 'Both',
+              value: 'both',
+            },
+            {
+              label: 'Website only',
+              value: 'website',
+            },
+            {
+              label: 'Repo only',
+              value: 'repo',
+            },
+          ],
+          admin: {
+            description: 'Which links to show on the card.',
+          },
+        },
+        {
           name: 'directory',
           type: 'checkbox',
           defaultValue: false,

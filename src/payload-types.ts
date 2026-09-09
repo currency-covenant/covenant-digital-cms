@@ -1192,6 +1192,10 @@ export interface WorkGridBlock {
     description: string;
     projectLink?: string | null;
     repoLink?: string | null;
+    /**
+     * Which links to show on the card.
+     */
+    linkDisplay?: ('both' | 'website' | 'repo') | null;
     directory?: boolean | null;
     beta?: boolean | null;
     iconImage?: (number | null) | Media;
@@ -2205,6 +2209,7 @@ export interface WorkGridBlockSelect<T extends boolean = true> {
         description?: T;
         projectLink?: T;
         repoLink?: T;
+        linkDisplay?: T;
         directory?: T;
         beta?: T;
         iconImage?: T;
