@@ -7,6 +7,7 @@ import * as migration_20260620_fix_tenants_permissions from './20260620_fix_tena
 import * as migration_20260620_profile_links from './20260620_profile_links';
 import * as migration_20260620_content_network from './20260620_content_network';
 import * as migration_20260908_remove_tenancy from './20260908_remove_tenancy';
+import * as migration_20260908_work_grid_link_display from './20260908_work_grid_link_display';
 
 export const migrations = [
   {
@@ -18,5 +19,10 @@ export const migrations = [
     up: migration_20260908_remove_tenancy.up,
     down: migration_20260908_remove_tenancy.down,
     name: '20260908_remove_tenancy'
+  },
+  {
+    up: migration_20260908_work_grid_link_display.up,
+    down: migration_20260908_work_grid_link_display.down,
+    name: '20260908_work_grid_link_display'
   },
 ];
